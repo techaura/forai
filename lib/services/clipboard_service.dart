@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:cryptography/cryptography.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'settings_service.dart';
 
 class ClipboardService {
+  static const _androidClipboardChannel = MethodChannel(
+    'com.steppefort.keywallet_multios/clipboard',
+  );
+
   static final _sha256 = Sha256();
   static final _lifecycleObserver = _ClipboardLifecycleObserver();
 
@@ -16,6 +20,9 @@ class ClipboardService {
   static String? _ownedFingerprint;
   static bool _observingLifecycle = false;
   static bool _isResumed = true;
+
+  static bool get _isAndroid =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   static void initialize(SettingsService settingsService) {
     if (!identical(_settingsService, settingsService)) {
@@ -38,13 +45,19 @@ class ClipboardService {
 
   static Future<void> copyText(String value) async {
     final timeoutSeconds = _settingsService?.clipboardClearSeconds ?? 0;
-    final fingerprint = timeoutSeconds > 0 ? await _fingerprint(value) : null;
+    final trackForClear = timeoutSeconds > 0;
+    final fingerprint =
+        !_isAndroid && trackForClear ? await _fingerprint(value) : null;
 
-    await Clipboard.setData(ClipboardData(text: value));
+    final copied = await _writeClipboardText(
+      value,
+      sensitive: _isAndroid,
+      trackForClear: trackForClear,
+    );
 
     _clearTimer?.cancel();
     _clearTimer = null;
-    _ownedFingerprint = fingerprint;
+    _ownedFingerprint = _isAndroid ? null : (copied ? fingerprint : null);
 
     if (!_isResumed && fingerprint != null) {
       _scheduleClear();
@@ -58,6 +71,10 @@ class ClipboardService {
       _clearTimer?.cancel();
       _clearTimer = null;
       _ownedFingerprint = null;
+
+      if (_isAndroid) {
+        unawaited(_disableAndroidOwnedClear());
+      }
       return;
     }
 
@@ -68,6 +85,17 @@ class ClipboardService {
 
   static void _handleLifecycleState(AppLifecycleState state) {
     final nowResumed = state == AppLifecycleState.resumed;
+
+    if (_isAndroid) {
+      _isResumed = nowResumed;
+
+      if (!nowResumed) {
+        _clearTimer?.cancel();
+        _clearTimer = null;
+      }
+
+      return;
+    }
 
     if (nowResumed == _isResumed) {
       return;
@@ -102,6 +130,10 @@ class ClipboardService {
       return;
     }
 
+    if (_isAndroid) {
+      return;
+    }
+
     _clearTimer = Timer(
       Duration(seconds: timeoutSeconds),
       () => unawaited(_clearIfOwned()),
@@ -117,25 +149,29 @@ class ClipboardService {
       return;
     }
 
-    final current = await Clipboard.getData('text/plain');
-    final currentText = current?.text;
+    final current = await _readClipboardText();
+    if (!current.success) {
+      return;
+    }
 
-    // A newer WalletWalley copy happened while the clipboard was being read.
+    final currentText = current.text;
+
     if (_ownedFingerprint != expectedFingerprint) {
       return;
     }
 
     if (currentText == null ||
         await _fingerprint(currentText) != expectedFingerprint) {
-      // Clipboard no longer contains the value WalletWalley copied.
       _ownedFingerprint = null;
       return;
     }
 
-    // Re-read immediately before clearing to reduce the chance of overwriting
-    // a clipboard value that another application placed there meanwhile.
-    final latest = await Clipboard.getData('text/plain');
-    final latestText = latest?.text;
+    final latest = await _readClipboardText();
+    if (!latest.success) {
+      return;
+    }
+
+    final latestText = latest.text;
 
     if (_ownedFingerprint != expectedFingerprint) {
       return;
@@ -147,10 +183,70 @@ class ClipboardService {
       return;
     }
 
-    await Clipboard.setData(const ClipboardData(text: ''));
+    final cleared = await _writeClipboardText('', sensitive: false);
 
-    if (_ownedFingerprint == expectedFingerprint) {
+    if (cleared && _ownedFingerprint == expectedFingerprint) {
       _ownedFingerprint = null;
+    }
+  }
+
+  static Future<_ClipboardReadResult> _readClipboardText() async {
+    try {
+      final data = await Clipboard.getData('text/plain');
+      return _ClipboardReadResult(success: true, text: data?.text);
+    } on PlatformException catch (error) {
+      debugPrint('Clipboard read failed: ${error.code}: ${error.message}');
+      return const _ClipboardReadResult(success: false);
+    } on MissingPluginException catch (error) {
+      debugPrint('Clipboard read plugin missing: $error');
+      return const _ClipboardReadResult(success: false);
+    }
+  }
+
+  static Future<bool> _writeClipboardText(
+    String value, {
+    required bool sensitive,
+    bool trackForClear = false,
+  }) async {
+    if (_isAndroid && sensitive) {
+      try {
+        await _androidClipboardChannel.invokeMethod<void>(
+          'setSensitiveText',
+          <String, Object?>{'text': value, 'trackForClear': trackForClear},
+        );
+        return true;
+      } on PlatformException catch (error) {
+        debugPrint(
+          'Sensitive Android clipboard write failed: '
+          '${error.code}: ${error.message}',
+        );
+      } on MissingPluginException catch (error) {
+        debugPrint('Sensitive Android clipboard plugin missing: $error');
+      }
+    }
+
+    try {
+      await Clipboard.setData(ClipboardData(text: value));
+      return true;
+    } on PlatformException catch (error) {
+      debugPrint('Clipboard write failed: ${error.code}: ${error.message}');
+      return false;
+    } on MissingPluginException catch (error) {
+      debugPrint('Clipboard write plugin missing: $error');
+      return false;
+    }
+  }
+
+  static Future<void> _disableAndroidOwnedClear() async {
+    try {
+      await _androidClipboardChannel.invokeMethod<void>('disableOwnedClear');
+    } on PlatformException catch (error) {
+      debugPrint(
+        'Android clipboard clear tracking disable failed: '
+        '${error.code}: ${error.message}',
+      );
+    } on MissingPluginException catch (error) {
+      debugPrint('Android clipboard plugin missing: $error');
     }
   }
 
@@ -158,6 +254,13 @@ class ClipboardService {
     final hash = await _sha256.hash(utf8.encode(value));
     return base64Encode(hash.bytes);
   }
+}
+
+class _ClipboardReadResult {
+  final bool success;
+  final String? text;
+
+  const _ClipboardReadResult({required this.success, this.text});
 }
 
 class _ClipboardLifecycleObserver with WidgetsBindingObserver {
