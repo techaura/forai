@@ -13,6 +13,17 @@
         "language": {
           "label": "Sprache"
         },
+        "settings": {
+          "title": "Einstellungen",
+          "clipboard": "Zwischenablage",
+          "clipboardClearPolicy": "Kopierte Werte löschen",
+          "clipboardHelp": "Legt fest, wie lange von {appName} kopierte Werte in der Zwischenablage verbleiben.",
+          "clipboardNever": "Nie",
+          "clipboard15Seconds": "15 Sekunden",
+          "clipboard30Seconds": "30 Sekunden",
+          "clipboard1Minute": "1 Minute",
+          "clipboard5Minutes": "5 Minuten"
+        },
         "common": {
           "cancel": "Abbrechen",
           "ok": "OK",
@@ -295,6 +306,17 @@
       "strings": {
         "language": {
           "label": "Language"
+        },
+        "settings": {
+          "title": "Settings",
+          "clipboard": "Clipboard",
+          "clipboardClearPolicy": "Clear copied values",
+          "clipboardHelp": "Controls how long values copied by {appName} remain in the clipboard.",
+          "clipboardNever": "Never",
+          "clipboard15Seconds": "15 seconds",
+          "clipboard30Seconds": "30 seconds",
+          "clipboard1Minute": "1 minute",
+          "clipboard5Minutes": "5 minutes"
         },
         "common": {
           "cancel": "Cancel",
@@ -579,6 +601,17 @@
         "language": {
           "label": "Idioma"
         },
+        "settings": {
+          "title": "Configuración",
+          "clipboard": "Portapapeles",
+          "clipboardClearPolicy": "Borrar valores copiados",
+          "clipboardHelp": "Controla cuánto tiempo permanecen en el portapapeles los valores copiados por {appName}.",
+          "clipboardNever": "Nunca",
+          "clipboard15Seconds": "15 segundos",
+          "clipboard30Seconds": "30 segundos",
+          "clipboard1Minute": "1 minuto",
+          "clipboard5Minutes": "5 minutos"
+        },
         "common": {
           "cancel": "Cancelar",
           "ok": "OK",
@@ -861,6 +894,17 @@
       "strings": {
         "language": {
           "label": "Langue"
+        },
+        "settings": {
+          "title": "Paramètres",
+          "clipboard": "Presse-papiers",
+          "clipboardClearPolicy": "Effacer les valeurs copiées",
+          "clipboardHelp": "Définit combien de temps les valeurs copiées par {appName} restent dans le presse-papiers.",
+          "clipboardNever": "Jamais",
+          "clipboard15Seconds": "15 secondes",
+          "clipboard30Seconds": "30 secondes",
+          "clipboard1Minute": "1 minute",
+          "clipboard5Minutes": "5 minutes"
         },
         "common": {
           "cancel": "Annuler",
@@ -1145,6 +1189,17 @@
         "language": {
           "label": "Мова"
         },
+        "settings": {
+          "title": "Налаштування",
+          "clipboard": "Буфер обміну",
+          "clipboardClearPolicy": "Очищати скопійовані значення",
+          "clipboardHelp": "Визначає, як довго скопійовані з {appName} значення залишаються в буфері обміну.",
+          "clipboardNever": "Ніколи",
+          "clipboard15Seconds": "15 секунд",
+          "clipboard30Seconds": "30 секунд",
+          "clipboard1Minute": "1 хвилина",
+          "clipboard5Minutes": "5 хвилин"
+        },
         "common": {
           "cancel": "Скасувати",
           "ok": "OK",
@@ -1427,6 +1482,17 @@
       "strings": {
         "language": {
           "label": "Lingua"
+        },
+        "settings": {
+          "title": "Impostazioni",
+          "clipboard": "Appunti",
+          "clipboardClearPolicy": "Cancella i valori copiati",
+          "clipboardHelp": "Definisce per quanto tempo i valori copiati da {appName} restano negli appunti.",
+          "clipboardNever": "Mai",
+          "clipboard15Seconds": "15 secondi",
+          "clipboard30Seconds": "30 secondi",
+          "clipboard1Minute": "1 minuto",
+          "clipboard5Minutes": "5 minuti"
         },
         "common": {
           "cancel": "Annulla",

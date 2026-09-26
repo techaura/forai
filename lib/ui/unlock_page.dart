@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'language_dropdown.dart';
+import 'settings_dialog.dart';
 import 'language_scope.dart';
 
 class UnlockPage extends StatefulWidget {
@@ -61,9 +61,13 @@ class _UnlockPageState extends State<UnlockPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.centerRight,
-                    child: LanguageDropdown(),
+                    child: IconButton(
+                      tooltip: languageService.text('settings.title'),
+                      onPressed: () => showSettingsDialog(context),
+                      icon: const Icon(Icons.settings_outlined),
+                    ),
                   ),
                   const SizedBox(height: 16),
 
@@ -90,18 +94,14 @@ class _UnlockPageState extends State<UnlockPage> {
                     autofocus: true,
                     onSubmitted: (_) => _submit(),
                     decoration: InputDecoration(
-                      labelText: languageService.text(
-                        'unlock.masterPassword',
-                      ),
+                      labelText: languageService.text('unlock.masterPassword'),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() => _obscure = !_obscure);
                         },
                         icon: Icon(
-                          _obscure
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _obscure ? Icons.visibility : Icons.visibility_off,
                         ),
                       ),
                     ),
@@ -133,13 +133,12 @@ class _UnlockPageState extends State<UnlockPage> {
                       ),
 
                       OutlinedButton.icon(
-                        onPressed: widget.busy
-                            ? null
-                            : () => widget.onImport(_password.text),
+                        onPressed:
+                            widget.busy
+                                ? null
+                                : () => widget.onImport(_password.text),
                         icon: const Icon(Icons.file_open),
-                        label: Text(
-                          languageService.text('unlock.importVault'),
-                        ),
+                        label: Text(languageService.text('unlock.importVault')),
                       ),
                     ],
                   ),

@@ -7,12 +7,14 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keywallet_multios/services/language_service.dart';
+import 'package:keywallet_multios/services/settings_service.dart';
 import 'package:keywallet_multios/ui/app.dart';
 
 void main() {
   test('WalletWalleyApp can be constructed', () {
     final app = WalletWalleyApp(
       languageService: LanguageService(),
+      settingsService: SettingsService(),
     );
 
     expect(app, isNotNull);

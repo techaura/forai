@@ -5,11 +5,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../core/vault/vault_repository.dart';
 import '../services/file_service.dart';
 import '../services/language_service.dart';
+import '../services/settings_service.dart';
 import 'language_scope.dart';
+import 'settings_scope.dart';
 import 'unlock_page.dart';
 import 'wallet_page.dart';
-
-
 
 /// Application shell.
 ///
@@ -17,10 +17,12 @@ import 'wallet_page.dart';
 /// snackbars therefore always receive MaterialLocalizations/ScaffoldMessenger.
 class WalletWalleyApp extends StatelessWidget {
   final LanguageService languageService;
+  final SettingsService settingsService;
 
   const WalletWalleyApp({
     super.key,
     required this.languageService,
+    required this.settingsService,
   });
 
   @override
@@ -33,17 +35,14 @@ class WalletWalleyApp extends StatelessWidget {
 
           title: languageService.productName,
 
-          locale: _localeFromTag(
-            languageService.currentLanguage.locale,
-          ),
+          locale: _localeFromTag(languageService.currentLanguage.locale),
 
           supportedLocales: [
             for (final language in languageService.languages)
               _localeFromTag(language.locale),
           ],
 
-          localizationsDelegates:
-          GlobalMaterialLocalizations.delegates,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
 
           themeMode: ThemeMode.dark,
 
@@ -54,9 +53,12 @@ class WalletWalleyApp extends StatelessWidget {
           ),
 
           builder: (context, child) {
-            return LanguageScope(
-              service: languageService,
-              child: child ?? const SizedBox.shrink(),
+            return SettingsScope(
+              service: settingsService,
+              child: LanguageScope(
+                service: languageService,
+                child: child ?? const SizedBox.shrink(),
+              ),
             );
           },
 
@@ -98,11 +100,11 @@ class _WalletWalleyController extends StatefulWidget {
   const _WalletWalleyController();
 
   @override
-  State<_WalletWalleyController> createState() => _WalletWalleyControllerState();
+  State<_WalletWalleyController> createState() =>
+      _WalletWalleyControllerState();
 }
 
-class _WalletWalleyControllerState
-    extends State<_WalletWalleyController> {
+class _WalletWalleyControllerState extends State<_WalletWalleyController> {
   final VaultRepository _repository = VaultRepository();
 
   bool _loading = true;
@@ -154,9 +156,9 @@ class _WalletWalleyControllerState
     } catch (error) {
       if (!mounted) return;
       setState(() => _error = _friendlyError(error));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_friendlyError(error))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(_friendlyError(error))));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -183,17 +185,11 @@ class _WalletWalleyControllerState
   }
 
   Future<void> _unlock(String password) {
-    return _run(
-      () => _repository.unlock(password),
-      sessionPassword: password,
-    );
+    return _run(() => _repository.unlock(password), sessionPassword: password);
   }
 
   Future<void> _create(String password) {
-    return _run(
-      () => _repository.create(password),
-      sessionPassword: password,
-    );
+    return _run(() => _repository.create(password), sessionPassword: password);
   }
 
   Future<void> _import(String password) async {
@@ -288,46 +284,58 @@ class _WalletWalleyControllerState
     return showDialog<String>(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(title),
-          content: SizedBox(
-            width: 440,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(message),
-                const SizedBox(height: 16),
-                TextFormField(
-                  autofocus: true,
-                  obscureText: obscure,
-                  onChanged: (value) => password = value,
-                  decoration: InputDecoration(
-                    labelText: languageService.text('vault.importPassword'),
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      onPressed: () => setDialogState(() => obscure = !obscure),
-                      icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
+      builder:
+          (dialogContext) => StatefulBuilder(
+            builder:
+                (context, setDialogState) => AlertDialog(
+                  title: Text(title),
+                  content: SizedBox(
+                    width: 440,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(message),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          autofocus: true,
+                          obscureText: obscure,
+                          onChanged: (value) => password = value,
+                          decoration: InputDecoration(
+                            labelText: languageService.text(
+                              'vault.importPassword',
+                            ),
+                            border: const OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              onPressed:
+                                  () =>
+                                      setDialogState(() => obscure = !obscure),
+                              icon: Icon(
+                                obscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                            ),
+                          ),
+                          onFieldSubmitted:
+                              (_) => Navigator.of(dialogContext).pop(password),
+                        ),
+                      ],
                     ),
                   ),
-                  onFieldSubmitted: (_) => Navigator.of(dialogContext).pop(password),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: Text(languageService.text('common.cancel')),
+                    ),
+                    FilledButton(
+                      onPressed:
+                          () => Navigator.of(dialogContext).pop(password),
+                      child: Text(languageService.text('common.import')),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(languageService.text('common.cancel')),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(password),
-              child: Text(languageService.text('common.import')),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

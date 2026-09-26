@@ -10,7 +10,7 @@ import '../core/vault/vault_node.dart';
 import '../services/clipboard_service.dart';
 import '../services/file_service.dart';
 import '../services/lock_file_service.dart';
-import 'language_dropdown.dart';
+import 'settings_dialog.dart';
 import 'language_scope.dart';
 
 class WalletPage extends StatefulWidget {
@@ -70,7 +70,8 @@ class _WalletPageState extends State<WalletPage> {
     return null;
   }
 
-  String _newId(String prefix) => '$prefix-${DateTime.now().microsecondsSinceEpoch}';
+  String _newId(String prefix) =>
+      '$prefix-${DateTime.now().microsecondsSinceEpoch}';
 
   Future<void> _mutate(Future<void> Function() action) async {
     if (_busy) return;
@@ -107,33 +108,34 @@ class _WalletPageState extends State<WalletPage> {
     var value = initial;
     return showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(title),
-        content: SizedBox(
-          width: 440,
-          child: TextFormField(
-            initialValue: initial,
-            autofocus: true,
-            onChanged: (text) => value = text,
-            decoration: InputDecoration(
-              labelText: label,
-              border: const OutlineInputBorder(),
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(title),
+            content: SizedBox(
+              width: 440,
+              child: TextFormField(
+                initialValue: initial,
+                autofocus: true,
+                onChanged: (text) => value = text,
+                decoration: InputDecoration(
+                  labelText: label,
+                  border: const OutlineInputBorder(),
+                ),
+                onFieldSubmitted:
+                    (_) => Navigator.of(dialogContext).pop(value.trim()),
+              ),
             ),
-            onFieldSubmitted: (_) =>
-                Navigator.of(dialogContext).pop(value.trim()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(languageService.text('common.cancel')),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(value.trim()),
+                child: Text(languageService.text('common.ok')),
+              ),
+            ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(languageService.text('common.cancel')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(value.trim()),
-            child: Text(languageService.text('common.ok')),
-          ),
-        ],
-      ),
     );
   }
 
@@ -144,11 +146,7 @@ class _WalletPageState extends State<WalletPage> {
       label: languageService.text('groupEditor.nameLabel'),
     );
     if (name == null || name.isEmpty) return;
-    final group = VaultNode(
-      id: _newId('group'),
-      name: name,
-      type: 'group',
-    );
+    final group = VaultNode(id: _newId('group'), name: name, type: 'group');
     await _mutate(() async {
       _targetGroup().children.add(group);
       _selected = group;
@@ -161,46 +159,47 @@ class _WalletPageState extends State<WalletPage> {
     var text = '';
     final result = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(languageService.text('secretEditor.newTitle')),
-        content: SizedBox(
-          width: 560,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                initialValue: name,
-                autofocus: true,
-                onChanged: (value) => name = value,
-                decoration: InputDecoration(
-                  labelText: languageService.text('secretEditor.nameLabel'),
-                  border: const OutlineInputBorder(),
-                ),
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(languageService.text('secretEditor.newTitle')),
+            content: SizedBox(
+              width: 560,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    initialValue: name,
+                    autofocus: true,
+                    onChanged: (value) => name = value,
+                    decoration: InputDecoration(
+                      labelText: languageService.text('secretEditor.nameLabel'),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    minLines: 5,
+                    maxLines: 12,
+                    onChanged: (value) => text = value,
+                    decoration: InputDecoration(
+                      labelText: languageService.text('secretEditor.textLabel'),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
-              TextFormField(
-                minLines: 5,
-                maxLines: 12,
-                onChanged: (value) => text = value,
-                decoration: InputDecoration(
-                  labelText: languageService.text('secretEditor.textLabel'),
-                  border: const OutlineInputBorder(),
-                ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(languageService.text('common.cancel')),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: Text(languageService.text('common.save')),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(languageService.text('common.cancel')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(languageService.text('common.save')),
-          ),
-        ],
-      ),
     );
 
     name = name.trim();
@@ -248,9 +247,7 @@ class _WalletPageState extends State<WalletPage> {
           );
           break;
         case _KeyPreset.sshEd25519:
-          generated = await KeyGenerators.sshEd25519(
-            comment: request.comment,
-          );
+          generated = await KeyGenerators.sshEd25519(comment: request.comment);
           break;
         case _KeyPreset.sshRsa:
           generated = await KeyGenerators.sshRsa(
@@ -324,9 +321,7 @@ class _WalletPageState extends State<WalletPage> {
     if (FileService.isVaultFileName(picked.name)) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(languageService.text('importKey.wrongVault')),
-        ),
+        SnackBar(content: Text(languageService.text('importKey.wrongVault'))),
       );
       return;
     }
@@ -353,9 +348,10 @@ class _WalletPageState extends State<WalletPage> {
 
   Future<void> _lockFile() async {
     final languageService = LanguageScope.of(context);
-    final keys = LockFileService.findX25519Keys(widget.vault.root)
-        .where((key) => key.canEncrypt)
-        .toList();
+    final keys =
+        LockFileService.findX25519Keys(
+          widget.vault.root,
+        ).where((key) => key.canEncrypt).toList();
     if (keys.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -373,22 +369,23 @@ class _WalletPageState extends State<WalletPage> {
 
     setState(() => _busy = true);
     try {
-      final path = request.directory
-          ? await LockFileService.encryptPickedDirectory(
-              recipient: request.key,
-              dialogTitle: languageService.text(
-                'fileDialogs.chooseDirectoryEncrypt',
-              ),
-            )
-          : await LockFileService.encryptPickedFile(
-              recipient: request.key,
-              chooseDialogTitle: languageService.text(
-                'fileDialogs.chooseFileEncrypt',
-              ),
-              saveDialogTitle: languageService.text(
-                'fileDialogs.saveEncryptedFile',
-              ),
-            );
+      final path =
+          request.directory
+              ? await LockFileService.encryptPickedDirectory(
+                recipient: request.key,
+                dialogTitle: languageService.text(
+                  'fileDialogs.chooseDirectoryEncrypt',
+                ),
+              )
+              : await LockFileService.encryptPickedFile(
+                recipient: request.key,
+                chooseDialogTitle: languageService.text(
+                  'fileDialogs.chooseFileEncrypt',
+                ),
+                saveDialogTitle: languageService.text(
+                  'fileDialogs.saveEncryptedFile',
+                ),
+              );
       if (!mounted || path == null) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -425,9 +422,10 @@ class _WalletPageState extends State<WalletPage> {
     if (picked == null) return;
 
     final method = KwvLockCrypto.methodFromContainer(picked.bytes);
-    final keys = LockFileService.findX25519Keys(widget.vault.root)
-        .where((key) => key.canDecrypt)
-        .toList();
+    final keys =
+        LockFileService.findX25519Keys(
+          widget.vault.root,
+        ).where((key) => key.canDecrypt).toList();
     if (keys.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -450,12 +448,13 @@ class _WalletPageState extends State<WalletPage> {
 
     final selected = await showDialog<LockKeyRef>(
       context: context,
-      builder: (dialogContext) => _UnlockFileDialog(
-        fileName: picked.name,
-        methodName: KwvLockCrypto.methodName(method),
-        keys: ordered,
-        matchingKeys: matches,
-      ),
+      builder:
+          (dialogContext) => _UnlockFileDialog(
+            fileName: picked.name,
+            methodName: KwvLockCrypto.methodName(method),
+            keys: ordered,
+            matchingKeys: matches,
+          ),
     );
     if (selected == null) return;
 
@@ -522,34 +521,35 @@ class _WalletPageState extends State<WalletPage> {
     final languageService = LanguageScope.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(languageService.text('delete.title')),
-        content: Text(
-          selected.isGroup && selected.children.isNotEmpty
-              ? languageService.text(
-                  'delete.withChildren',
-                  parameters: {'name': selected.name},
-                )
-              : languageService.text(
-                  'delete.single',
-                  parameters: {'name': selected.name},
-                ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(languageService.text('common.cancel')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(languageService.text('delete.title')),
+            content: Text(
+              selected.isGroup && selected.children.isNotEmpty
+                  ? languageService.text(
+                    'delete.withChildren',
+                    parameters: {'name': selected.name},
+                  )
+                  : languageService.text(
+                    'delete.single',
+                    parameters: {'name': selected.name},
+                  ),
             ),
-            child: Text(languageService.text('common.delete')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(languageService.text('common.cancel')),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                child: Text(languageService.text('common.delete')),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     if (confirmed != true) return;
 
@@ -561,7 +561,9 @@ class _WalletPageState extends State<WalletPage> {
 
   String _guessContentType(String name) {
     final lower = name.toLowerCase();
-    if (lower.endsWith('.txt') || lower.endsWith('.pub') || lower.endsWith('.pem')) {
+    if (lower.endsWith('.txt') ||
+        lower.endsWith('.pub') ||
+        lower.endsWith('.pem')) {
       return 'text/plain';
     }
     if (lower.endsWith('.json')) return 'application/json';
@@ -587,6 +589,11 @@ class _WalletPageState extends State<WalletPage> {
                 ),
               ),
             ),
+          ),
+          IconButton(
+            tooltip: languageService.text('settings.title'),
+            onPressed: _busy ? null : () => showSettingsDialog(context),
+            icon: const Icon(Icons.settings_outlined),
           ),
           if (showActionLabels) ...[
             TextButton.icon(
@@ -616,12 +623,16 @@ class _WalletPageState extends State<WalletPage> {
             ),
           ] else ...[
             IconButton(
-              tooltip: languageService.text('wallet.importEncryptedVaultTooltip'),
+              tooltip: languageService.text(
+                'wallet.importEncryptedVaultTooltip',
+              ),
               onPressed: _busy ? null : widget.onImportVault,
               icon: const Icon(Icons.file_open),
             ),
             IconButton(
-              tooltip: languageService.text('wallet.exportEncryptedVaultTooltip'),
+              tooltip: languageService.text(
+                'wallet.exportEncryptedVaultTooltip',
+              ),
               onPressed: _busy ? null : widget.onExportVault,
               icon: const Icon(Icons.save_alt),
             ),
@@ -646,13 +657,6 @@ class _WalletPageState extends State<WalletPage> {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(12, 8, 12, 4),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: LanguageDropdown(),
-            ),
-          ),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -666,7 +670,8 @@ class _WalletPageState extends State<WalletPage> {
                         onAddKey: _addKey,
                         onAddText: _addText,
                         onImportFile: _importFile,
-                        canEditSelection: !identical(selected, widget.vault.root),
+                        canEditSelection:
+                            !identical(selected, widget.vault.root),
                         onRename: _renameSelected,
                         onDelete: _deleteSelected,
                       ),
@@ -688,7 +693,8 @@ class _WalletPageState extends State<WalletPage> {
                     SizedBox(
                       width: 335,
                       child: Material(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerLow,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -715,8 +721,9 @@ class _WalletPageState extends State<WalletPage> {
                                   child: _TreePanel(
                                     root: widget.vault.root,
                                     selected: selected,
-                                    onSelected: (node) =>
-                                        setState(() => _selected = node),
+                                    onSelected:
+                                        (node) =>
+                                            setState(() => _selected = node),
                                   ),
                                 ),
                               ),
@@ -743,7 +750,6 @@ class _WalletPageState extends State<WalletPage> {
   }
 }
 
-
 enum _KeyPreset {
   githubSshEd25519,
   githubSshRsa,
@@ -762,38 +768,38 @@ enum _KeyPreset {
 
 extension _KeyPresetInfo on _KeyPreset {
   String get localizationId => switch (this) {
-        _KeyPreset.githubSshEd25519 => 'githubSshEd25519',
-        _KeyPreset.githubSshRsa => 'githubSshRsa',
-        _KeyPreset.sshEd25519 => 'sshEd25519',
-        _KeyPreset.sshRsa => 'sshRsa',
-        _KeyPreset.solanaEd25519 => 'solanaEd25519',
-        _KeyPreset.wireGuardX25519 => 'wireGuardX25519',
-        _KeyPreset.fileLockX25519 => 'fileLockX25519',
-        _KeyPreset.ethereumSecp256k1 => 'ethereumSecp256k1',
-        _KeyPreset.tronSecp256k1 => 'tronSecp256k1',
-        _KeyPreset.bitcoinWif => 'bitcoinWif',
-        _KeyPreset.randomToken => 'randomToken',
-        _KeyPreset.customKey => 'customKey',
-        _KeyPreset.githubToken => 'githubToken',
-      };
+    _KeyPreset.githubSshEd25519 => 'githubSshEd25519',
+    _KeyPreset.githubSshRsa => 'githubSshRsa',
+    _KeyPreset.sshEd25519 => 'sshEd25519',
+    _KeyPreset.sshRsa => 'sshRsa',
+    _KeyPreset.solanaEd25519 => 'solanaEd25519',
+    _KeyPreset.wireGuardX25519 => 'wireGuardX25519',
+    _KeyPreset.fileLockX25519 => 'fileLockX25519',
+    _KeyPreset.ethereumSecp256k1 => 'ethereumSecp256k1',
+    _KeyPreset.tronSecp256k1 => 'tronSecp256k1',
+    _KeyPreset.bitcoinWif => 'bitcoinWif',
+    _KeyPreset.randomToken => 'randomToken',
+    _KeyPreset.customKey => 'customKey',
+    _KeyPreset.githubToken => 'githubToken',
+  };
 
   String get titleKey => 'keygen.presets.$localizationId.label';
   String get subtitleKey => 'keygen.presets.$localizationId.description';
   String get defaultNameKey => 'keygen.presets.$localizationId.defaultName';
 
   IconData get icon => switch (this) {
-        _KeyPreset.githubSshEd25519 || _KeyPreset.githubSshRsa => Icons.code,
-        _KeyPreset.sshEd25519 || _KeyPreset.sshRsa => Icons.key,
-        _KeyPreset.solanaEd25519 ||
-        _KeyPreset.ethereumSecp256k1 ||
-        _KeyPreset.tronSecp256k1 ||
-        _KeyPreset.bitcoinWif => Icons.account_balance_wallet_outlined,
-        _KeyPreset.wireGuardX25519 => Icons.vpn_key_outlined,
-        _KeyPreset.fileLockX25519 => Icons.lock_outline,
-        _KeyPreset.randomToken => Icons.password,
-        _KeyPreset.customKey => Icons.tune,
-        _KeyPreset.githubToken => Icons.token_outlined,
-      };
+    _KeyPreset.githubSshEd25519 || _KeyPreset.githubSshRsa => Icons.code,
+    _KeyPreset.sshEd25519 || _KeyPreset.sshRsa => Icons.key,
+    _KeyPreset.solanaEd25519 ||
+    _KeyPreset.ethereumSecp256k1 ||
+    _KeyPreset.tronSecp256k1 ||
+    _KeyPreset.bitcoinWif => Icons.account_balance_wallet_outlined,
+    _KeyPreset.wireGuardX25519 => Icons.vpn_key_outlined,
+    _KeyPreset.fileLockX25519 => Icons.lock_outline,
+    _KeyPreset.randomToken => Icons.password,
+    _KeyPreset.customKey => Icons.tune,
+    _KeyPreset.githubToken => Icons.token_outlined,
+  };
 
   bool get needsComment =>
       this == _KeyPreset.githubSshEd25519 ||
@@ -861,11 +867,11 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
   String? _error;
 
   bool get _customIsEc => const {
-        'secp256k1',
-        'secp256r1',
-        'secp384r1',
-        'secp521r1',
-      }.contains(_customAlgorithm);
+    'secp256k1',
+    'secp256r1',
+    'secp384r1',
+    'secp521r1',
+  }.contains(_customAlgorithm);
 
   @override
   void didChangeDependencies() {
@@ -930,19 +936,20 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
         labelText: languageService.text('keygen.rsaModulusSize'),
         border: const OutlineInputBorder(),
       ),
-      items: const [2048, 3072, 4096]
-          .map(
-            (bits) => DropdownMenuItem(
-              value: bits,
-              child: Text(
-                languageService.text(
-                  'keygen.bits',
-                  parameters: {'bits': bits},
+      items:
+          const [2048, 3072, 4096]
+              .map(
+                (bits) => DropdownMenuItem(
+                  value: bits,
+                  child: Text(
+                    languageService.text(
+                      'keygen.bits',
+                      parameters: {'bits': bits},
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .toList(),
+              )
+              .toList(),
       onChanged: (value) {
         if (value != null) setState(() => _rsaBits = value);
       },
@@ -969,22 +976,25 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                   labelText: languageService.text('keygen.preset'),
                   border: const OutlineInputBorder(),
                 ),
-                items: _KeyPreset.values
-                    .map(
-                      (preset) => DropdownMenuItem(
-                        value: preset,
-                        child: Row(
-                          children: [
-                            Icon(preset.icon, size: 19),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(languageService.text(preset.titleKey)),
+                items:
+                    _KeyPreset.values
+                        .map(
+                          (preset) => DropdownMenuItem(
+                            value: preset,
+                            child: Row(
+                              children: [
+                                Icon(preset.icon, size: 19),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    languageService.text(preset.titleKey),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
+                          ),
+                        )
+                        .toList(),
                 onChanged: _changePreset,
               ),
               const SizedBox(height: 10),
@@ -1046,13 +1056,15 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                 ),
                 SwitchListTile.adaptive(
                   contentPadding: EdgeInsets.zero,
-                  title: Text(languageService.text('keygen.compressedPublicKey')),
+                  title: Text(
+                    languageService.text('keygen.compressedPublicKey'),
+                  ),
                   subtitle: Text(
                     languageService.text('keygen.compressedRecommended'),
                   ),
                   value: _bitcoinCompressed,
-                  onChanged: (value) =>
-                      setState(() => _bitcoinCompressed = value),
+                  onChanged:
+                      (value) => setState(() => _bitcoinCompressed = value),
                 ),
               ],
               if (_preset == _KeyPreset.randomToken) ...[
@@ -1066,31 +1078,32 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                           labelText: languageService.text('keygen.entropySize'),
                           border: const OutlineInputBorder(),
                         ),
-                        items: const [
-                          64,
-                          80,
-                          92,
-                          96,
-                          112,
-                          128,
-                          192,
-                          256,
-                          384,
-                          512,
-                          1024,
-                        ]
-                            .map(
-                              (bits) => DropdownMenuItem(
-                                value: bits,
-                                child: Text(
-                                  languageService.text(
-                                    'keygen.bits',
-                                    parameters: {'bits': bits},
+                        items:
+                            const [
+                                  64,
+                                  80,
+                                  92,
+                                  96,
+                                  112,
+                                  128,
+                                  192,
+                                  256,
+                                  384,
+                                  512,
+                                  1024,
+                                ]
+                                .map(
+                                  (bits) => DropdownMenuItem(
+                                    value: bits,
+                                    child: Text(
+                                      languageService.text(
+                                        'keygen.bits',
+                                        parameters: {'bits': bits},
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                            .toList(),
+                                )
+                                .toList(),
                         onChanged: (value) {
                           if (value != null) setState(() => _tokenBits = value);
                         },
@@ -1104,18 +1117,19 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                           labelText: languageService.text('keygen.encoding'),
                           border: const OutlineInputBorder(),
                         ),
-                        items: const ['base64url', 'base64', 'hex']
-                            .map(
-                              (encoding) => DropdownMenuItem(
-                                value: encoding,
-                                child: Text(
-                                  languageService.text(
-                                    'keygen.encodings.$encoding',
+                        items:
+                            const ['base64url', 'base64', 'hex']
+                                .map(
+                                  (encoding) => DropdownMenuItem(
+                                    value: encoding,
+                                    child: Text(
+                                      languageService.text(
+                                        'keygen.encodings.$encoding',
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                            .toList(),
+                                )
+                                .toList(),
                         onChanged: (value) {
                           if (value != null) {
                             setState(() => _tokenEncoding = value);
@@ -1135,26 +1149,27 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                     labelText: languageService.text('keygen.algorithm'),
                     border: const OutlineInputBorder(),
                   ),
-                  items: const [
-                    'ed25519',
-                    'x25519',
-                    'secp256k1',
-                    'secp256r1',
-                    'secp384r1',
-                    'secp521r1',
-                    'rsa',
-                  ]
-                      .map(
-                        (algorithm) => DropdownMenuItem(
-                          value: algorithm,
-                          child: Text(
-                            languageService.text(
-                              'keygen.algorithms.$algorithm',
+                  items:
+                      const [
+                            'ed25519',
+                            'x25519',
+                            'secp256k1',
+                            'secp256r1',
+                            'secp384r1',
+                            'secp521r1',
+                            'rsa',
+                          ]
+                          .map(
+                            (algorithm) => DropdownMenuItem(
+                              value: algorithm,
+                              child: Text(
+                                languageService.text(
+                                  'keygen.algorithms.$algorithm',
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                          )
+                          .toList(),
                   onChanged: (value) {
                     if (value != null) setState(() => _customAlgorithm = value);
                   },
@@ -1169,18 +1184,19 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                       labelText: languageService.text('keygen.rawEncoding'),
                       border: const OutlineInputBorder(),
                     ),
-                    items: const ['hex', 'base64', 'base64url']
-                        .map(
-                          (encoding) => DropdownMenuItem(
-                            value: encoding,
-                            child: Text(
-                              languageService.text(
-                                'keygen.encodings.$encoding',
+                    items:
+                        const ['hex', 'base64', 'base64url']
+                            .map(
+                              (encoding) => DropdownMenuItem(
+                                value: encoding,
+                                child: Text(
+                                  languageService.text(
+                                    'keygen.encodings.$encoding',
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        )
-                        .toList(),
+                            )
+                            .toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() => _customEncoding = value);
@@ -1192,8 +1208,8 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(languageService.text('keygen.compressedSec1')),
                     value: _customEcCompressed,
-                    onChanged: (value) =>
-                        setState(() => _customEcCompressed = value),
+                    onChanged:
+                        (value) => setState(() => _customEcCompressed = value),
                   ),
               ],
               if (_preset == _KeyPreset.githubToken) ...[
@@ -1207,11 +1223,12 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                     helperText: languageService.text('keygen.githubTokenHelp'),
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
-                      tooltip: _showSecret
-                          ? languageService.text('keygen.hideToken')
-                          : languageService.text('keygen.showToken'),
-                      onPressed: () =>
-                          setState(() => _showSecret = !_showSecret),
+                      tooltip:
+                          _showSecret
+                              ? languageService.text('keygen.hideToken')
+                              : languageService.text('keygen.showToken'),
+                      onPressed:
+                          () => setState(() => _showSecret = !_showSecret),
                       icon: Icon(
                         _showSecret ? Icons.visibility_off : Icons.visibility,
                       ),
@@ -1252,7 +1269,6 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
     );
   }
 }
-
 
 class _LockFileRequest {
   final LockKeyRef key;
@@ -1299,14 +1315,15 @@ class _LockFileDialogState extends State<_LockFileDialog> {
                 labelText: languageService.text('lockFile.recipientPublicKey'),
                 border: const OutlineInputBorder(),
               ),
-              items: widget.keys
-                  .map(
-                    (key) => DropdownMenuItem(
-                      value: key,
-                      child: Text('${key.label} · X25519'),
-                    ),
-                  )
-                  .toList(),
+              items:
+                  widget.keys
+                      .map(
+                        (key) => DropdownMenuItem(
+                          value: key,
+                          child: Text('${key.label} · X25519'),
+                        ),
+                      )
+                      .toList(),
               onChanged: (value) {
                 if (value != null) setState(() => _key = value);
               },
@@ -1350,9 +1367,10 @@ class _LockFileDialogState extends State<_LockFileDialog> {
           child: Text(languageService.text('common.cancel')),
         ),
         FilledButton.icon(
-          onPressed: () => Navigator.of(context).pop(
-            _LockFileRequest(key: _key, directory: _directory),
-          ),
+          onPressed:
+              () => Navigator.of(
+                context,
+              ).pop(_LockFileRequest(key: _key, directory: _directory)),
           icon: const Icon(Icons.lock_outline),
           label: Text(languageService.text('lockFile.chooseAndEncrypt')),
         ),
@@ -1384,9 +1402,10 @@ class _UnlockFileDialogState extends State<_UnlockFileDialog> {
   @override
   void initState() {
     super.initState();
-    _key = widget.matchingKeys.isNotEmpty
-        ? widget.matchingKeys.first
-        : widget.keys.first;
+    _key =
+        widget.matchingKeys.isNotEmpty
+            ? widget.matchingKeys.first
+            : widget.keys.first;
   }
 
   @override
@@ -1422,21 +1441,22 @@ class _UnlockFileDialogState extends State<_UnlockFileDialog> {
                 labelText: languageService.text('unlockFile.privateKey'),
                 border: const OutlineInputBorder(),
               ),
-              items: widget.keys
-                  .map(
-                    (key) => DropdownMenuItem(
-                      value: key,
-                      child: Text(
-                        widget.matchingKeys.contains(key)
-                            ? languageService.text(
-                                'unlockFile.matchesRecipient',
-                                parameters: {'keyLabel': key.label},
-                              )
-                            : key.label,
-                      ),
-                    ),
-                  )
-                  .toList(),
+              items:
+                  widget.keys
+                      .map(
+                        (key) => DropdownMenuItem(
+                          value: key,
+                          child: Text(
+                            widget.matchingKeys.contains(key)
+                                ? languageService.text(
+                                  'unlockFile.matchesRecipient',
+                                  parameters: {'keyLabel': key.label},
+                                )
+                                : key.label,
+                          ),
+                        ),
+                      )
+                      .toList(),
               onChanged: (value) {
                 if (value != null) setState(() => _key = value);
               },
@@ -1447,10 +1467,11 @@ class _UnlockFileDialogState extends State<_UnlockFileDialog> {
                   ? languageService.text('unlockFile.noFingerprintMatch')
                   : languageService.text('unlockFile.matchingSelected'),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: widget.matchingKeys.isEmpty
+                color:
+                    widget.matchingKeys.isEmpty
                         ? Theme.of(context).colorScheme.error
                         : null,
-                  ),
+              ),
             ),
           ],
         ),
@@ -1592,25 +1613,27 @@ class _NodeTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
               node.name,
-              style: identical(node, selected)
-                  ? TextStyle(color: Theme.of(context).colorScheme.primary)
-                  : null,
+              style:
+                  identical(node, selected)
+                      ? TextStyle(color: Theme.of(context).colorScheme.primary)
+                      : null,
             ),
           ),
         ),
-        children: node.children
-            .map(
-              (child) => Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: _NodeTile(
-                  node: child,
-                  selected: selected,
-                  onSelected: onSelected,
-                  depth: depth + 1,
-                ),
-              ),
-            )
-            .toList(),
+        children:
+            node.children
+                .map(
+                  (child) => Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: _NodeTile(
+                      node: child,
+                      selected: selected,
+                      onSelected: onSelected,
+                      depth: depth + 1,
+                    ),
+                  ),
+                )
+                .toList(),
       );
     }
 
@@ -1666,9 +1689,9 @@ class _DetailsPanel extends StatelessWidget {
           node.isGroup
               ? languageService.text('details.groupType')
               : languageService.text(
-                  'details.entryType',
-                  parameters: {'kind': kindLabel(node.kind)},
-                ),
+                'details.entryType',
+                parameters: {'kind': kindLabel(node.kind)},
+              ),
           style: Theme.of(context).textTheme.bodySmall,
         ),
         if (node.kind == 'github-ssh') ...[
@@ -1778,14 +1801,15 @@ class _GithubPublicKey extends StatelessWidget {
                   label: Text(languageService.text('details.copyForGithub')),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () => FileService.saveArtifact(
-                    fileName: artifact.name,
-                    bytes: artifact.data,
-                    dialogTitle: languageService.text(
-                      'fileDialogs.exportFile',
-                      parameters: {'fileName': artifact.name},
-                    ),
-                  ),
+                  onPressed:
+                      () => FileService.saveArtifact(
+                        fileName: artifact.name,
+                        bytes: artifact.data,
+                        dialogTitle: languageService.text(
+                          'fileDialogs.exportFile',
+                          parameters: {'fileName': artifact.name},
+                        ),
+                      ),
                   icon: const Icon(Icons.save_alt, size: 18),
                   label: Text(languageService.text('details.exportPub')),
                 ),
@@ -1813,9 +1837,10 @@ class _ArtifactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageService = LanguageScope.of(context);
-    final text = _isText
-        ? utf8.decode(artifact.data, allowMalformed: true).trimRight()
-        : null;
+    final text =
+        _isText
+            ? utf8.decode(artifact.data, allowMalformed: true).trimRight()
+            : null;
 
     return Card.outlined(
       child: Padding(
@@ -1851,14 +1876,15 @@ class _ArtifactCard extends StatelessWidget {
                     label: Text(languageService.text('details.copy')),
                   ),
                 TextButton.icon(
-                  onPressed: () => FileService.saveArtifact(
-                    fileName: artifact.name,
-                    bytes: artifact.data,
-                    dialogTitle: languageService.text(
-                      'fileDialogs.exportFile',
-                      parameters: {'fileName': artifact.name},
-                    ),
-                  ),
+                  onPressed:
+                      () => FileService.saveArtifact(
+                        fileName: artifact.name,
+                        bytes: artifact.data,
+                        dialogTitle: languageService.text(
+                          'fileDialogs.exportFile',
+                          parameters: {'fileName': artifact.name},
+                        ),
+                      ),
                   icon: const Icon(Icons.save_alt, size: 18),
                   label: Text(languageService.text('details.export')),
                 ),
