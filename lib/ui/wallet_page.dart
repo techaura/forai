@@ -312,7 +312,10 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future<void> _importFile() async {
-    final picked = await FileService.pickAnyFile();
+    final languageService = LanguageScope.of(context);
+    final picked = await FileService.pickAnyFile(
+      dialogTitle: languageService.text('fileDialogs.importFile'),
+    );
     if (picked == null) return;
 
     // "Import key" is intentionally separate from "Import vault".
@@ -320,7 +323,6 @@ class _WalletPageState extends State<WalletPage> {
     // artifacts or silently changing the meaning of this button.
     if (FileService.isVaultFileName(picked.name)) {
       if (!mounted) return;
-      final languageService = LanguageScope.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(languageService.text('importKey.wrongVault')),
@@ -372,8 +374,21 @@ class _WalletPageState extends State<WalletPage> {
     setState(() => _busy = true);
     try {
       final path = request.directory
-          ? await LockFileService.encryptPickedDirectory(recipient: request.key)
-          : await LockFileService.encryptPickedFile(recipient: request.key);
+          ? await LockFileService.encryptPickedDirectory(
+              recipient: request.key,
+              dialogTitle: languageService.text(
+                'fileDialogs.chooseDirectoryEncrypt',
+              ),
+            )
+          : await LockFileService.encryptPickedFile(
+              recipient: request.key,
+              chooseDialogTitle: languageService.text(
+                'fileDialogs.chooseFileEncrypt',
+              ),
+              saveDialogTitle: languageService.text(
+                'fileDialogs.saveEncryptedFile',
+              ),
+            );
       if (!mounted || path == null) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -404,7 +419,9 @@ class _WalletPageState extends State<WalletPage> {
 
   Future<void> _unlockFile() async {
     final languageService = LanguageScope.of(context);
-    final picked = await LockFileService.pickLockedFile();
+    final picked = await LockFileService.pickLockedFile(
+      dialogTitle: languageService.text('fileDialogs.openLockedFile'),
+    );
     if (picked == null) return;
 
     final method = KwvLockCrypto.methodFromContainer(picked.bytes);
@@ -447,6 +464,9 @@ class _WalletPageState extends State<WalletPage> {
       final output = await LockFileService.unlockToSiblingDirectory(
         picked: picked,
         recipient: selected,
+        destinationDialogTitle: languageService.text(
+          'fileDialogs.chooseUnlockDestination',
+        ),
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -606,12 +626,12 @@ class _WalletPageState extends State<WalletPage> {
               icon: const Icon(Icons.save_alt),
             ),
             IconButton(
-              tooltip: languageService.text('wallet.lockFile'),
+              tooltip: languageService.text('wallet.lockFileTooltip'),
               onPressed: _busy ? null : _lockFile,
               icon: const Icon(Icons.lock_outline),
             ),
             IconButton(
-              tooltip: languageService.text('wallet.unlockFile'),
+              tooltip: languageService.text('wallet.unlockFileTooltip'),
               onPressed: _busy ? null : _unlockFile,
               icon: const Icon(Icons.lock_open),
             ),
@@ -1554,6 +1574,13 @@ class _NodeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageService = LanguageScope.of(context);
+
+    String kindLabel(String kind) {
+      final translated = languageService.text('details.kinds.$kind');
+      return translated == '[details.kinds.$kind]' ? kind : translated;
+    }
+
     if (node.isGroup) {
       return ExpansionTile(
         key: PageStorageKey(node.id),
@@ -1591,7 +1618,7 @@ class _NodeTile extends StatelessWidget {
       selected: identical(node, selected),
       leading: const Icon(Icons.key),
       title: Text(node.name),
-      subtitle: node.kind.isEmpty ? null : Text(node.kind),
+      subtitle: node.kind.isEmpty ? null : Text(kindLabel(node.kind)),
       onTap: () => onSelected(node),
     );
   }
@@ -1611,6 +1638,25 @@ class _DetailsPanel extends StatelessWidget {
       return translated == '[metadataLabels.$key]' ? key : translated;
     }
 
+    String kindLabel(String kind) {
+      final translated = languageService.text('details.kinds.$kind');
+      return translated == '[details.kinds.$kind]' ? kind : translated;
+    }
+
+    String metadataValue(String key, String value) {
+      if (key == 'purpose' && value == 'KWVLOCK file encryption') {
+        return languageService.text('metadataValues.kwvlockFileEncryption');
+      }
+      if (key == 'source' && value == 'issued by GitHub') {
+        return languageService.text('metadataValues.issuedByGitHub');
+      }
+      if ((key == 'compressed' || key == 'compressed_public_key') &&
+          (value == 'true' || value == 'false')) {
+        return languageService.text('metadataValues.$value');
+      }
+      return value;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1621,7 +1667,7 @@ class _DetailsPanel extends StatelessWidget {
               ? languageService.text('details.groupType')
               : languageService.text(
                   'details.entryType',
-                  parameters: {'kind': node.kind},
+                  parameters: {'kind': kindLabel(node.kind)},
                 ),
           style: Theme.of(context).textTheme.bodySmall,
         ),
@@ -1643,7 +1689,11 @@ class _DetailsPanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(width: 150, child: Text(metadataLabel(entry.key))),
-                  Expanded(child: SelectableText(entry.value)),
+                  Expanded(
+                    child: SelectableText(
+                      metadataValue(entry.key, entry.value),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1731,6 +1781,10 @@ class _GithubPublicKey extends StatelessWidget {
                   onPressed: () => FileService.saveArtifact(
                     fileName: artifact.name,
                     bytes: artifact.data,
+                    dialogTitle: languageService.text(
+                      'fileDialogs.exportFile',
+                      parameters: {'fileName': artifact.name},
+                    ),
                   ),
                   icon: const Icon(Icons.save_alt, size: 18),
                   label: Text(languageService.text('details.exportPub')),
@@ -1800,6 +1854,10 @@ class _ArtifactCard extends StatelessWidget {
                   onPressed: () => FileService.saveArtifact(
                     fileName: artifact.name,
                     bytes: artifact.data,
+                    dialogTitle: languageService.text(
+                      'fileDialogs.exportFile',
+                      parameters: {'fileName': artifact.name},
+                    ),
                   ),
                   icon: const Icon(Icons.save_alt, size: 18),
                   label: Text(languageService.text('details.export')),

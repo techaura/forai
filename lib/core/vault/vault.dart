@@ -28,7 +28,7 @@ class Vault {
       updatedAt: now,
       root: VaultNode(
         id: 'root',
-        name: 'KeyWallet',
+        name: 'WalletWalley',
         type: 'group',
       ),
     );
