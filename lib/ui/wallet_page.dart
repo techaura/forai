@@ -13,6 +13,8 @@ import '../services/lock_file_service.dart';
 import 'settings_dialog.dart';
 import 'language_scope.dart';
 
+enum _WalletOverflowAction { importVault, exportVault, encrypt, decrypt }
+
 class WalletPage extends StatefulWidget {
   final Vault vault;
   final int revision;
@@ -574,28 +576,121 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     final languageService = LanguageScope.of(context);
     final selected = _selectedNode;
-    final showActionLabels = MediaQuery.sizeOf(context).width >= 1180;
+    final windowWidth = MediaQuery.sizeOf(context).width;
+    final compactAppBar = windowWidth < 760;
+    final showActionLabels = windowWidth >= 1180;
+    final revisionLabel = languageService.text(
+      'wallet.revision',
+      parameters: {'revision': widget.revision},
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(languageService.productName),
+        title: Text(
+          compactAppBar ? revisionLabel : languageService.productName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                languageService.text(
-                  'wallet.revision',
-                  parameters: {'revision': widget.revision},
-                ),
+          if (!compactAppBar)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(revisionLabel),
               ),
             ),
-          ),
           IconButton(
             tooltip: languageService.text('settings.title'),
             onPressed: _busy ? null : () => showSettingsDialog(context),
             icon: const Icon(Icons.settings_outlined),
           ),
-          if (showActionLabels) ...[
+          if (compactAppBar) ...[
+            PopupMenuButton<_WalletOverflowAction>(
+              enabled: !_busy,
+              tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+              icon: const Icon(Icons.more_vert),
+              onSelected: (action) async {
+                switch (action) {
+                  case _WalletOverflowAction.importVault:
+                    await widget.onImportVault();
+                    break;
+                  case _WalletOverflowAction.exportVault:
+                    await widget.onExportVault();
+                    break;
+                  case _WalletOverflowAction.encrypt:
+                    await _lockFile();
+                    break;
+                  case _WalletOverflowAction.decrypt:
+                    await _unlockFile();
+                    break;
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem(
+                      value: _WalletOverflowAction.importVault,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.file_open, size: 20),
+                          const SizedBox(width: 12),
+                          Flexible(
+                            child: Text(
+                              languageService.text('wallet.importVault'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: _WalletOverflowAction.exportVault,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.save_alt, size: 20),
+                          const SizedBox(width: 12),
+                          Flexible(
+                            child: Text(
+                              languageService.text('wallet.exportVault'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: _WalletOverflowAction.encrypt,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.lock_outline, size: 20),
+                          const SizedBox(width: 12),
+                          Flexible(
+                            child: Text(
+                              languageService.text('wallet.lockFile'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: _WalletOverflowAction.decrypt,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.lock_open, size: 20),
+                          const SizedBox(width: 12),
+                          Flexible(
+                            child: Text(
+                              languageService.text('wallet.unlockFile'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+            ),
+            IconButton(
+              tooltip: languageService.text('wallet.lock'),
+              onPressed: _busy ? null : widget.onLock,
+              icon: const Icon(Icons.lock),
+            ),
+          ] else if (showActionLabels) ...[
             TextButton.icon(
               onPressed: _busy ? null : widget.onImportVault,
               icon: const Icon(Icons.file_open, size: 18),
@@ -932,6 +1027,7 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
     final languageService = LanguageScope.of(context);
     return DropdownButtonFormField<int>(
       initialValue: _rsaBits,
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: languageService.text('keygen.rsaModulusSize'),
         border: const OutlineInputBorder(),
@@ -1036,6 +1132,7 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   initialValue: _bitcoinNetwork,
+                  isExpanded: true,
                   decoration: InputDecoration(
                     labelText: languageService.text('keygen.bitcoinNetwork'),
                     border: const OutlineInputBorder(),
@@ -1069,11 +1166,12 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
               ],
               if (_preset == _KeyPreset.randomToken) ...[
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<int>(
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    Widget bitsField() {
+                      return DropdownButtonFormField<int>(
                         initialValue: _tokenBits,
+                        isExpanded: true,
                         decoration: InputDecoration(
                           labelText: languageService.text('keygen.entropySize'),
                           border: const OutlineInputBorder(),
@@ -1100,6 +1198,7 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                                         'keygen.bits',
                                         parameters: {'bits': bits},
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 )
@@ -1107,12 +1206,13 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                         onChanged: (value) {
                           if (value != null) setState(() => _tokenBits = value);
                         },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
+                      );
+                    }
+
+                    Widget encodingField() {
+                      return DropdownButtonFormField<String>(
                         initialValue: _tokenEncoding,
+                        isExpanded: true,
                         decoration: InputDecoration(
                           labelText: languageService.text('keygen.encoding'),
                           border: const OutlineInputBorder(),
@@ -1126,6 +1226,7 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                                       languageService.text(
                                         'keygen.encodings.$encoding',
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 )
@@ -1135,9 +1236,28 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                             setState(() => _tokenEncoding = value);
                           }
                         },
-                      ),
-                    ),
-                  ],
+                      );
+                    }
+
+                    if (constraints.maxWidth < 420) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          bitsField(),
+                          const SizedBox(height: 12),
+                          encodingField(),
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Expanded(child: bitsField()),
+                        const SizedBox(width: 12),
+                        Expanded(child: encodingField()),
+                      ],
+                    );
+                  },
                 ),
               ],
               if (_preset == _KeyPreset.customKey) ...[
@@ -1180,6 +1300,7 @@ class _KeyGeneratorDialogState extends State<_KeyGeneratorDialog> {
                 else
                   DropdownButtonFormField<String>(
                     initialValue: _customEncoding,
+                    isExpanded: true,
                     decoration: InputDecoration(
                       labelText: languageService.text('keygen.rawEncoding'),
                       border: const OutlineInputBorder(),
@@ -1842,74 +1963,132 @@ class _ArtifactCard extends StatelessWidget {
             ? utf8.decode(artifact.data, allowMalformed: true).trimRight()
             : null;
 
+    Widget artifactInfo() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${artifact.name} · ${artifact.data.length} B',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          if (artifact.contentType.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              artifact.contentType,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ],
+      );
+    }
+
+    Widget copyButton() {
+      return TextButton.icon(
+        onPressed:
+            text == null
+                ? null
+                : () async {
+                  await ClipboardService.copyText(text);
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        languageService.text(
+                          'details.artifactCopied',
+                          parameters: {'artifactName': artifact.name},
+                        ),
+                      ),
+                    ),
+                  );
+                },
+        icon: const Icon(Icons.copy, size: 18),
+        label: Text(languageService.text('details.copy')),
+      );
+    }
+
+    Widget exportButton() {
+      return TextButton.icon(
+        onPressed:
+            () => FileService.saveArtifact(
+              fileName: artifact.name,
+              bytes: artifact.data,
+              dialogTitle: languageService.text(
+                'fileDialogs.exportFile',
+                parameters: {'fileName': artifact.name},
+              ),
+            ),
+        icon: const Icon(Icons.save_alt, size: 18),
+        label: Text(languageService.text('details.export')),
+      );
+    }
+
+    Widget textBody() {
+      final value = text;
+      if (value == null) {
+        return const SizedBox.shrink();
+      }
+
+      final selectable = SelectableText(
+        value,
+        style: const TextStyle(fontFamily: 'monospace'),
+      );
+
+      if (!value.contains('\n')) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: selectable,
+        );
+      }
+
+      return selectable;
+    }
+
     return Card.outlined(
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final narrow = constraints.maxWidth < 520;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Text(
-                    '${artifact.name} · ${artifact.data.length} B',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                if (narrow) ...[
+                  artifactInfo(),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
+                    children: [if (text != null) copyButton(), exportButton()],
                   ),
-                ),
-                if (text != null)
-                  TextButton.icon(
-                    onPressed: () async {
-                      await ClipboardService.copyText(text);
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            languageService.text(
-                              'details.artifactCopied',
-                              parameters: {'artifactName': artifact.name},
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.copy, size: 18),
-                    label: Text(languageService.text('details.copy')),
+                ] else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: artifactInfo()),
+                      const SizedBox(width: 8),
+                      if (text != null) copyButton(),
+                      exportButton(),
+                    ],
                   ),
-                TextButton.icon(
-                  onPressed:
-                      () => FileService.saveArtifact(
-                        fileName: artifact.name,
-                        bytes: artifact.data,
-                        dialogTitle: languageService.text(
-                          'fileDialogs.exportFile',
-                          parameters: {'fileName': artifact.name},
-                        ),
-                      ),
-                  icon: const Icon(Icons.save_alt, size: 18),
-                  label: Text(languageService.text('details.export')),
-                ),
+                if (text != null) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: textBody(),
+                  ),
+                ],
               ],
-            ),
-            if (artifact.contentType.isNotEmpty)
-              Text(
-                artifact.contentType,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            if (text != null) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: SelectableText(
-                  text,
-                  style: const TextStyle(fontFamily: 'monospace'),
-                ),
-              ),
-            ],
-          ],
+            );
+          },
         ),
       ),
     );
