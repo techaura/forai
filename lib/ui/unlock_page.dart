@@ -50,107 +50,135 @@ class _UnlockPageState extends State<UnlockPage> {
     final languageService = LanguageScope.of(context);
 
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
-          child: Card(
-            margin: const EdgeInsets.all(24),
-            child: Padding(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final centeredHeight =
+                constraints.maxHeight > 48 ? constraints.maxHeight - 48 : 0.0;
+
+            return SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                      tooltip: languageService.text('settings.title'),
-                      onPressed: () => showSettingsDialog(context),
-                      icon: const Icon(Icons.settings_outlined),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: centeredHeight),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                tooltip: languageService.text('settings.title'),
+                                onPressed: () => showSettingsDialog(context),
+                                icon: const Icon(Icons.settings_outlined),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
 
-                  Text(
-                    widget.hasVault
-                        ? languageService.text('unlock.titleUnlock')
-                        : languageService.text('unlock.titleCreate'),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+                            Text(
+                              widget.hasVault
+                                  ? languageService.text('unlock.titleUnlock')
+                                  : languageService.text('unlock.titleCreate'),
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
 
-                  const SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
-                  Text(
-                    widget.hasVault
-                        ? languageService.text('unlock.descriptionUnlock')
-                        : languageService.text('unlock.descriptionCreate'),
-                  ),
+                            Text(
+                              widget.hasVault
+                                  ? languageService.text(
+                                    'unlock.descriptionUnlock',
+                                  )
+                                  : languageService.text(
+                                    'unlock.descriptionCreate',
+                                  ),
+                            ),
 
-                  const SizedBox(height: 20),
+                            const SizedBox(height: 20),
 
-                  TextField(
-                    controller: _password,
-                    obscureText: _obscure,
-                    autofocus: true,
-                    onSubmitted: (_) => _submit(),
-                    decoration: InputDecoration(
-                      labelText: languageService.text('unlock.masterPassword'),
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() => _obscure = !_obscure);
-                        },
-                        icon: Icon(
-                          _obscure ? Icons.visibility : Icons.visibility_off,
+                            TextField(
+                              controller: _password,
+                              obscureText: _obscure,
+                              autofocus: true,
+                              onSubmitted: (_) => _submit(),
+                              decoration: InputDecoration(
+                                labelText: languageService.text(
+                                  'unlock.masterPassword',
+                                ),
+                                border: const OutlineInputBorder(),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() => _obscure = !_obscure);
+                                  },
+                                  icon: Icon(
+                                    _obscure
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            if (widget.error != null) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                widget.error!,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                            ],
+
+                            const SizedBox(height: 20),
+
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                FilledButton(
+                                  onPressed: widget.busy ? null : _submit,
+                                  child: Text(
+                                    widget.hasVault
+                                        ? languageService.text('common.open')
+                                        : languageService.text('common.create'),
+                                  ),
+                                ),
+
+                                OutlinedButton.icon(
+                                  onPressed:
+                                      widget.busy
+                                          ? null
+                                          : () =>
+                                              widget.onImport(_password.text),
+                                  icon: const Icon(Icons.file_open),
+                                  label: Text(
+                                    languageService.text('unlock.importVault'),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            if (widget.busy) ...[
+                              const SizedBox(height: 20),
+                              const LinearProgressIndicator(),
+                            ],
+                          ],
                         ),
                       ),
                     ),
                   ),
-
-                  if (widget.error != null) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      widget.error!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  ],
-
-                  const SizedBox(height: 20),
-
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      FilledButton(
-                        onPressed: widget.busy ? null : _submit,
-                        child: Text(
-                          widget.hasVault
-                              ? languageService.text('common.open')
-                              : languageService.text('common.create'),
-                        ),
-                      ),
-
-                      OutlinedButton.icon(
-                        onPressed:
-                            widget.busy
-                                ? null
-                                : () => widget.onImport(_password.text),
-                        icon: const Icon(Icons.file_open),
-                        label: Text(languageService.text('unlock.importVault')),
-                      ),
-                    ],
-                  ),
-
-                  if (widget.busy) ...[
-                    const SizedBox(height: 20),
-                    const LinearProgressIndicator(),
-                  ],
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

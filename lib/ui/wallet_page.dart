@@ -750,96 +750,90 @@ class _WalletPageState extends State<WalletPage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                if (constraints.maxWidth < 760) {
-                  return ListView(
-                    padding: const EdgeInsets.all(12),
-                    children: [
-                      _Toolbox(
-                        busy: _busy,
-                        onAddGroup: _addGroup,
-                        onAddKey: _addKey,
-                        onAddText: _addText,
-                        onImportFile: _importFile,
-                        canEditSelection:
-                            !identical(selected, widget.vault.root),
-                        onRename: _renameSelected,
-                        onDelete: _deleteSelected,
-                      ),
-                      const SizedBox(height: 8),
-                      _TreePanel(
-                        root: widget.vault.root,
-                        selected: selected,
-                        onSelected: (node) => setState(() => _selected = node),
-                      ),
-                      const SizedBox(height: 12),
-                      _DetailsPanel(node: selected),
-                    ],
-                  );
-                }
+      body: SafeArea(
+        top: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 760) {
+              return ListView(
+                padding: const EdgeInsets.all(12),
+                children: [
+                  _Toolbox(
+                    busy: _busy,
+                    onAddGroup: _addGroup,
+                    onAddKey: _addKey,
+                    onAddText: _addText,
+                    onImportFile: _importFile,
+                    canEditSelection: !identical(selected, widget.vault.root),
+                    onRename: _renameSelected,
+                    onDelete: _deleteSelected,
+                  ),
+                  const SizedBox(height: 8),
+                  _TreePanel(
+                    root: widget.vault.root,
+                    selected: selected,
+                    onSelected: (node) => setState(() => _selected = node),
+                  ),
+                  const SizedBox(height: 12),
+                  _DetailsPanel(node: selected),
+                ],
+              );
+            }
 
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      width: 335,
-                      child: Material(
-                        color:
-                            Theme.of(context).colorScheme.surfaceContainerLow,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: _Toolbox(
-                                busy: _busy,
-                                onAddGroup: _addGroup,
-                                onAddKey: _addKey,
-                                onAddText: _addText,
-                                onImportFile: _importFile,
-                                canEditSelection:
-                                    !identical(selected, widget.vault.root),
-                                onRename: _renameSelected,
-                                onDelete: _deleteSelected,
-                              ),
-                            ),
-                            const Divider(height: 1),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                padding: const EdgeInsets.all(8),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: _TreePanel(
-                                    root: widget.vault.root,
-                                    selected: selected,
-                                    onSelected:
-                                        (node) =>
-                                            setState(() => _selected = node),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: 335,
+                  child: Material(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: _Toolbox(
+                            busy: _busy,
+                            onAddGroup: _addGroup,
+                            onAddKey: _addKey,
+                            onAddText: _addText,
+                            onImportFile: _importFile,
+                            canEditSelection:
+                                !identical(selected, widget.vault.root),
+                            onRename: _renameSelected,
+                            onDelete: _deleteSelected,
+                          ),
                         ),
-                      ),
+                        const Divider(height: 1),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(8),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: _TreePanel(
+                                root: widget.vault.root,
+                                selected: selected,
+                                onSelected:
+                                    (node) => setState(() => _selected = node),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const VerticalDivider(width: 1),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(20),
-                        child: _DetailsPanel(node: selected),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+                  ),
+                ),
+                const VerticalDivider(width: 1),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: _DetailsPanel(node: selected),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
