@@ -6,11 +6,15 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:keywallet_multios/services/language_service.dart';
 import 'package:keywallet_multios/ui/app.dart';
 
 void main() {
-  test('KeyWalletApp can be constructed', () {
-    const app = KeyWalletApp();
+  test('WalletWalleyApp can be constructed', () {
+    final app = WalletWalleyApp(
+      languageService: LanguageService(),
+    );
+
     expect(app, isNotNull);
   });
 }
