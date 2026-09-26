@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.steppefort" "\0"
-            VALUE "FileDescription", "keywallet_multios" "\0"
+            VALUE "FileDescription", "FileDescription" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "keywallet_multios" "\0"
+            VALUE "InternalName", "ProductName" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.steppefort. All rights reserved." "\0"
-            VALUE "OriginalFilename", "keywallet_multios.exe" "\0"
-            VALUE "ProductName", "keywallet_multios" "\0"
+            VALUE "OriginalFilename", "FileDescription.exe" "\0"
+            VALUE "ProductName", "ProductName" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
