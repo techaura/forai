@@ -1,0 +1,1558 @@
+{
+  "schemaVersion": 1,
+  "product": {
+    "name": "WalletWalley"
+  },
+  "defaultLanguage": "ua",
+  "fallbackLanguage": "en",
+  "languages": {
+    "de": {
+      "name": "Deutsch",
+      "locale": "de-DE",
+      "strings": {
+        "language": {
+          "label": "Sprache"
+        },
+        "common": {
+          "cancel": "Abbrechen",
+          "ok": "OK",
+          "save": "Speichern",
+          "delete": "Löschen",
+          "rename": "Umbenennen",
+          "create": "Erstellen",
+          "open": "Öffnen",
+          "import": "Importieren",
+          "export": "Exportieren",
+          "copy": "Kopieren",
+          "store": "Speichern",
+          "generate": "Generieren",
+          "file": "Datei",
+          "directory": "Verzeichnis",
+          "source": "Quelle",
+          "method": "Methode",
+          "name": "Name",
+          "text": "Text",
+          "group": "Gruppe",
+          "key": "Schlüssel",
+          "files": "Dateien",
+          "metadata": "Metadaten",
+          "lock": "Sperren",
+          "decrypt": "Entschlüsseln"
+        },
+        "unlock": {
+          "titleUnlock": "{appName} entsperren",
+          "titleCreate": "{appName} erstellen",
+          "descriptionUnlock": "Geben Sie das Master-Passwort für den lokalen verschlüsselten Tresor ein.",
+          "descriptionCreate": "Erstellen Sie ein Master-Passwort oder importieren Sie eine vorhandene .kwvault-Datei.",
+          "masterPassword": "Master-Passwort",
+          "importVault": ".kwvault importieren"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Falsches Passwort oder beschädigter Tresor.",
+          "passwordBeforeImport": "Geben Sie zuerst das Passwort der .kwvault-Datei ein.",
+          "exported": "Verschlüsselter Tresor exportiert",
+          "exportFailed": "Export fehlgeschlagen: {error}",
+          "importTitle": "{fileName} importieren",
+          "importReplaceWarning": "Der lokale Tresor wird erst ersetzt, nachdem die importierte Datei erfolgreich entschlüsselt und validiert wurde.",
+          "importPassword": "Master-Passwort des importierten Tresors",
+          "notUnlocked": "Tresor ist nicht entsperrt"
+        },
+        "wallet": {
+          "operationFailed": "Vorgang fehlgeschlagen: {error}",
+          "revision": "KWV1 · Rev. {revision}",
+          "importVault": "Tresor importieren",
+          "exportVault": "Tresor exportieren",
+          "importEncryptedVaultTooltip": "Verschlüsselten Tresor importieren",
+          "exportEncryptedVaultTooltip": "Verschlüsselten Tresor exportieren",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Sperren"
+        },
+        "groupEditor": {
+          "newTitle": "Neue Gruppe",
+          "nameLabel": "Gruppenname"
+        },
+        "secretEditor": {
+          "newTitle": "Neuer Text / geheime Information",
+          "nameLabel": "Name",
+          "textLabel": "Text / geheime Information"
+        },
+        "importKey": {
+          "wrongVault": "Dies ist ein {appName}-Tresor. Verwenden Sie oben „Tresor importieren“."
+        },
+        "lockFile": {
+          "noEncryptionKey": "Kein X25519-Schlüssel zum Verschlüsseln gefunden. Erstellen Sie zuerst „File Lock · X25519“.",
+          "encrypted": "Verschlüsselt: {path}",
+          "failed": "LockFile fehlgeschlagen: {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Öffentlicher Schlüssel des Empfängers",
+          "source": "Quelle",
+          "method": "Methode",
+          "explanation": "Die Quelle wird zuerst als ZIP gepackt. Zum Verschlüsseln wird nur der öffentliche Schlüssel benötigt.",
+          "chooseAndEncrypt": "Quelle wählen und verschlüsseln"
+        },
+        "unlockFile": {
+          "noPrivateKey": "In diesem Tresor ist kein privater X25519-Schlüssel verfügbar.",
+          "unlockedTo": "Entschlüsselt nach: {path}",
+          "failed": "UnlockFile fehlgeschlagen: {error}",
+          "title": "UnlockFile",
+          "fileLabel": "Datei: {fileName}",
+          "methodLabel": "Methode: {methodName}",
+          "privateKey": "Privater Schlüssel",
+          "matchesRecipient": "{keyLabel} · passt zum Empfänger",
+          "noFingerprintMatch": "Kein passender Schlüssel-Fingerprint gefunden. Sie können einen anderen privaten X25519-Schlüssel versuchen.",
+          "matchingSelected": "Der passende Empfängerschlüssel wurde automatisch ausgewählt.",
+          "decrypt": "Entschlüsseln"
+        },
+        "delete": {
+          "title": "Element löschen?",
+          "withChildren": "„{name}“ und den gesamten Inhalt löschen?",
+          "single": "„{name}“ löschen?"
+        },
+        "toolbox": {
+          "group": "Gruppe",
+          "key": "Schlüssel",
+          "text": "Text",
+          "importKey": "Schlüssel importieren",
+          "rename": "Umbenennen",
+          "delete": "Löschen"
+        },
+        "details": {
+          "groupType": "Gruppe",
+          "entryType": "Eintrag · {kind}",
+          "metadata": "Metadaten",
+          "files": "Dateien",
+          "emptyGroup": "Diese Gruppe ist leer.",
+          "githubPublicKeyTitle": "Öffentlicher SSH-Schlüssel für GitHub",
+          "githubPublicKeyCopied": "Öffentlicher GitHub-Schlüssel kopiert",
+          "copyForGithub": "Für GitHub kopieren",
+          "exportPub": ".pub exportieren",
+          "artifactCopied": "{artifactName} kopiert",
+          "copy": "Kopieren",
+          "export": "Exportieren"
+        },
+        "keygen": {
+          "title": "Schlüssel generieren / speichern",
+          "preset": "Voreinstellung",
+          "entryName": "Eintragsname",
+          "commentLabel": "Kommentar / Konto / E-Mail",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "RSA-Modulgröße",
+          "bits": "{bits} Bit",
+          "bitcoinNetwork": "Bitcoin-Netzwerk",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Komprimierter öffentlicher Schlüssel",
+          "compressedRecommended": "Für moderne Bitcoin-Wallets empfohlen",
+          "entropySize": "Entropie / Größe",
+          "encoding": "Kodierung",
+          "algorithm": "Algorithmus",
+          "rawEncoding": "Kodierung des Raw-Schlüssels",
+          "compressedSec1": "Komprimierter SEC1-Öffentlicher Schlüssel",
+          "githubToken": "GitHub-Token",
+          "githubTokenHelp": "GitHub stellt dieses Token aus; {appName} speichert es, erzeugt es aber nicht.",
+          "hideToken": "Token ausblenden",
+          "showToken": "Token anzeigen",
+          "errors": {
+            "entryNameRequired": "Ein Eintragsname ist erforderlich.",
+            "tokenRequired": "Fügen Sie das von GitHub ausgestellte Token ein."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "OpenSSH-Authentifizierungsschlüssel für GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "RSA-OpenSSH-Schlüssel für GitHub; konfigurierbare Modulgröße",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Allgemeines privates/öffentliches OpenSSH-Ed25519-Schlüsselpaar",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Allgemeines OpenSSH-RSA-Schlüsselpaar mit konfigurierbarer Größe",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "64-Byte-Schlüsselpaar als JSON + Base58-Adresse",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Private/öffentliche X25519-Schlüssel in Base64",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Dedizierter Empfängerschlüssel für KWVLOCK-Dateiverschlüsselung",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Privater Schlüssel, öffentlicher SEC1-Schlüssel und EIP-55-Adresse",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Privater/öffentlicher Schlüssel und Base58Check-TRON-Adresse",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "WIF-Privatschlüssel + P2PKH-Adresse",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Zufallstoken",
+              "description": "Kryptografisch zufälliges Geheimnis mit konfigurierbarer Größe",
+              "defaultName": "Zufallstoken"
+            },
+            "customKey": {
+              "label": "Benutzerdefiniertes Schlüsselpaar",
+              "description": "Konfigurierbares Raw-Ed/X25519-, EC- oder RSA-Schlüsselpaar",
+              "defaultName": "Benutzerdefinierter Schlüssel"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Von GitHub ausgestelltes PAT/Auth-Token speichern",
+              "defaultName": "GitHub-Token"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Algorithmus",
+          "bits": "Bits",
+          "address": "Adresse",
+          "encoding": "Kodierung",
+          "purpose": "Zweck",
+          "network": "Netzwerk",
+          "compressed": "Komprimiert",
+          "source": "Quelle",
+          "format": "Format",
+          "compressed_public_key": "Komprimierter öffentlicher Schlüssel"
+        },
+        "fileDialogs": {
+          "importVault": "{appName}-Tresor importieren",
+          "importFile": "Datei in {appName} importieren",
+          "exportVault": "Verschlüsselten {appName}-Tresor exportieren",
+          "exportFile": "{fileName} exportieren",
+          "openLockedFile": "Verschlüsselte KWVLOCK-Datei öffnen",
+          "chooseFileEncrypt": "Datei zum Verschlüsseln wählen",
+          "saveEncryptedFile": "Verschlüsselte Datei speichern",
+          "chooseDirectoryEncrypt": "Verzeichnis zum Verschlüsseln wählen",
+          "chooseUnlockDestination": "Ziel für entschlüsselten Inhalt wählen"
+        }
+      }
+    },
+    "en": {
+      "name": "English",
+      "locale": "en-US",
+      "strings": {
+        "language": {
+          "label": "Language"
+        },
+        "common": {
+          "cancel": "Cancel",
+          "ok": "OK",
+          "save": "Save",
+          "delete": "Delete",
+          "rename": "Rename",
+          "create": "Create",
+          "open": "Open",
+          "import": "Import",
+          "export": "Export",
+          "copy": "Copy",
+          "store": "Store",
+          "generate": "Generate",
+          "file": "File",
+          "directory": "Directory",
+          "source": "Source",
+          "method": "Method",
+          "name": "Name",
+          "text": "Text",
+          "group": "Group",
+          "key": "Key",
+          "files": "Files",
+          "metadata": "Metadata",
+          "lock": "Lock",
+          "decrypt": "Decrypt"
+        },
+        "unlock": {
+          "titleUnlock": "Unlock {appName}",
+          "titleCreate": "Create {appName}",
+          "descriptionUnlock": "Enter the master password for the local encrypted vault.",
+          "descriptionCreate": "Create a master password, or import an existing .kwvault.",
+          "masterPassword": "Master password",
+          "importVault": "Import .kwvault"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Wrong password or damaged vault.",
+          "passwordBeforeImport": "Enter the password of the .kwvault first.",
+          "exported": "Encrypted vault exported",
+          "exportFailed": "Export failed: {error}",
+          "importTitle": "Import {fileName}",
+          "importReplaceWarning": "This replaces the local vault only after the imported file is successfully decrypted and validated.",
+          "importPassword": "Master password of imported vault",
+          "notUnlocked": "Vault is not unlocked"
+        },
+        "wallet": {
+          "operationFailed": "Operation failed: {error}",
+          "revision": "KWV1 · rev {revision}",
+          "importVault": "Import vault",
+          "exportVault": "Export vault",
+          "importEncryptedVaultTooltip": "Import encrypted vault",
+          "exportEncryptedVaultTooltip": "Export encrypted vault",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Lock"
+        },
+        "groupEditor": {
+          "newTitle": "New group",
+          "nameLabel": "Group name"
+        },
+        "secretEditor": {
+          "newTitle": "New text / secret",
+          "nameLabel": "Name",
+          "textLabel": "Text / secret"
+        },
+        "importKey": {
+          "wrongVault": "This is a {appName} vault. Use “Import vault” in the top bar."
+        },
+        "lockFile": {
+          "noEncryptionKey": "No X25519 encryption key found. Create “File Lock · X25519” first.",
+          "encrypted": "Encrypted: {path}",
+          "failed": "LockFile failed: {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Recipient public key",
+          "source": "Source",
+          "method": "Method",
+          "explanation": "The source is packed as ZIP first. Only the public key is needed to encrypt.",
+          "chooseAndEncrypt": "Choose source & encrypt"
+        },
+        "unlockFile": {
+          "noPrivateKey": "No X25519 private key is available in this vault.",
+          "unlockedTo": "Unlocked to: {path}",
+          "failed": "UnlockFile failed: {error}",
+          "title": "UnlockFile",
+          "fileLabel": "File: {fileName}",
+          "methodLabel": "Method: {methodName}",
+          "privateKey": "Private key",
+          "matchesRecipient": "{keyLabel} · matches recipient",
+          "noFingerprintMatch": "No key fingerprint match was found. You can still try another X25519 private key.",
+          "matchingSelected": "The matching recipient key was selected automatically.",
+          "decrypt": "Decrypt"
+        },
+        "delete": {
+          "title": "Delete item?",
+          "withChildren": "Delete “{name}” and everything inside it?",
+          "single": "Delete “{name}”?"
+        },
+        "toolbox": {
+          "group": "Group",
+          "key": "Key",
+          "text": "Text",
+          "importKey": "Import key",
+          "rename": "Rename",
+          "delete": "Delete"
+        },
+        "details": {
+          "groupType": "group",
+          "entryType": "entry · {kind}",
+          "metadata": "Metadata",
+          "files": "Files",
+          "emptyGroup": "This group is empty.",
+          "githubPublicKeyTitle": "Public SSH key for GitHub",
+          "githubPublicKeyCopied": "GitHub public key copied",
+          "copyForGithub": "Copy for GitHub",
+          "exportPub": "Export .pub",
+          "artifactCopied": "{artifactName} copied",
+          "copy": "Copy",
+          "export": "Export"
+        },
+        "keygen": {
+          "title": "Generate / store key",
+          "preset": "Preset",
+          "entryName": "Entry name",
+          "commentLabel": "Comment / account / email",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "RSA modulus size",
+          "bits": "{bits} bit",
+          "bitcoinNetwork": "Bitcoin network",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Compressed public key",
+          "compressedRecommended": "Recommended for modern Bitcoin wallets",
+          "entropySize": "Entropy / size",
+          "encoding": "Encoding",
+          "algorithm": "Algorithm",
+          "rawEncoding": "Raw key encoding",
+          "compressedSec1": "Compressed SEC1 public key",
+          "githubToken": "GitHub token",
+          "githubTokenHelp": "GitHub issues this token; {appName} stores it but does not generate it.",
+          "hideToken": "Hide token",
+          "showToken": "Show token",
+          "errors": {
+            "entryNameRequired": "Entry name is required.",
+            "tokenRequired": "Paste the token issued by GitHub."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "OpenSSH authentication key for GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "RSA OpenSSH key for GitHub; configurable modulus size",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Generic OpenSSH private/public Ed25519 pair",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Generic OpenSSH RSA keypair with configurable size",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "64-byte keypair JSON + Base58 address",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Base64 private/public X25519 keys",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Dedicated recipient key for KWVLOCK file encryption",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Private key, SEC1 public key and EIP-55 address",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Private/public key and Base58Check TRON address",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "WIF private key + P2PKH address",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Random token",
+              "description": "Cryptographically random secret with configurable size",
+              "defaultName": "Random token"
+            },
+            "customKey": {
+              "label": "Custom keypair",
+              "description": "Raw configurable Ed/X25519, EC or RSA keypair",
+              "defaultName": "Custom key"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Store a PAT/auth token issued by GitHub",
+              "defaultName": "GitHub token"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Algorithm",
+          "bits": "Bits",
+          "address": "Address",
+          "encoding": "Encoding",
+          "purpose": "Purpose",
+          "network": "Network",
+          "compressed": "Compressed",
+          "source": "Source",
+          "format": "Format",
+          "compressed_public_key": "Compressed public key"
+        },
+        "fileDialogs": {
+          "importVault": "Import {appName} vault",
+          "importFile": "Import file into {appName}",
+          "exportVault": "Export encrypted {appName} vault",
+          "exportFile": "Export {fileName}",
+          "openLockedFile": "Open encrypted KWVLOCK file",
+          "chooseFileEncrypt": "Choose file to encrypt",
+          "saveEncryptedFile": "Save encrypted file",
+          "chooseDirectoryEncrypt": "Choose directory to encrypt",
+          "chooseUnlockDestination": "Choose destination for unlocked content"
+        }
+      }
+    },
+    "esp": {
+      "name": "Español",
+      "locale": "es-ES",
+      "strings": {
+        "language": {
+          "label": "Idioma"
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "ok": "OK",
+          "save": "Guardar",
+          "delete": "Eliminar",
+          "rename": "Renombrar",
+          "create": "Crear",
+          "open": "Abrir",
+          "import": "Importar",
+          "export": "Exportar",
+          "copy": "Copiar",
+          "store": "Guardar",
+          "generate": "Generar",
+          "file": "Archivo",
+          "directory": "Directorio",
+          "source": "Origen",
+          "method": "Método",
+          "name": "Nombre",
+          "text": "Texto",
+          "group": "Grupo",
+          "key": "Clave",
+          "files": "Archivos",
+          "metadata": "Metadatos",
+          "lock": "Bloquear",
+          "decrypt": "Descifrar"
+        },
+        "unlock": {
+          "titleUnlock": "Desbloquear {appName}",
+          "titleCreate": "Crear {appName}",
+          "descriptionUnlock": "Introduce la contraseña maestra del almacén cifrado local.",
+          "descriptionCreate": "Crea una contraseña maestra o importa un archivo .kwvault existente.",
+          "masterPassword": "Contraseña maestra",
+          "importVault": "Importar .kwvault"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Contraseña incorrecta o almacén dañado.",
+          "passwordBeforeImport": "Introduce primero la contraseña del .kwvault.",
+          "exported": "Almacén cifrado exportado",
+          "exportFailed": "Error al exportar: {error}",
+          "importTitle": "Importar {fileName}",
+          "importReplaceWarning": "El almacén local solo se sustituirá después de descifrar y validar correctamente el archivo importado.",
+          "importPassword": "Contraseña maestra del almacén importado",
+          "notUnlocked": "El almacén no está desbloqueado"
+        },
+        "wallet": {
+          "operationFailed": "La operación falló: {error}",
+          "revision": "KWV1 · rev. {revision}",
+          "importVault": "Importar almacén",
+          "exportVault": "Exportar almacén",
+          "importEncryptedVaultTooltip": "Importar almacén cifrado",
+          "exportEncryptedVaultTooltip": "Exportar almacén cifrado",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Bloquear"
+        },
+        "groupEditor": {
+          "newTitle": "Nuevo grupo",
+          "nameLabel": "Nombre del grupo"
+        },
+        "secretEditor": {
+          "newTitle": "Nuevo texto / secreto",
+          "nameLabel": "Nombre",
+          "textLabel": "Texto / secreto"
+        },
+        "importKey": {
+          "wrongVault": "Este es un almacén de {appName}. Usa «Importar almacén» en la barra superior."
+        },
+        "lockFile": {
+          "noEncryptionKey": "No se encontró una clave X25519 de cifrado. Crea primero «File Lock · X25519».",
+          "encrypted": "Cifrado: {path}",
+          "failed": "Error de LockFile: {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Clave pública del destinatario",
+          "source": "Origen",
+          "method": "Método",
+          "explanation": "El origen se empaqueta primero como ZIP. Para cifrar solo se necesita la clave pública.",
+          "chooseAndEncrypt": "Elegir origen y cifrar"
+        },
+        "unlockFile": {
+          "noPrivateKey": "No hay ninguna clave privada X25519 disponible en este almacén.",
+          "unlockedTo": "Descifrado en: {path}",
+          "failed": "Error de UnlockFile: {error}",
+          "title": "UnlockFile",
+          "fileLabel": "Archivo: {fileName}",
+          "methodLabel": "Método: {methodName}",
+          "privateKey": "Clave privada",
+          "matchesRecipient": "{keyLabel} · coincide con el destinatario",
+          "noFingerprintMatch": "No se encontró una huella de clave coincidente. Puedes probar otra clave privada X25519.",
+          "matchingSelected": "La clave de destinatario coincidente se seleccionó automáticamente.",
+          "decrypt": "Descifrar"
+        },
+        "delete": {
+          "title": "¿Eliminar elemento?",
+          "withChildren": "¿Eliminar «{name}» y todo su contenido?",
+          "single": "¿Eliminar «{name}»?"
+        },
+        "toolbox": {
+          "group": "Grupo",
+          "key": "Clave",
+          "text": "Texto",
+          "importKey": "Importar clave",
+          "rename": "Renombrar",
+          "delete": "Eliminar"
+        },
+        "details": {
+          "groupType": "grupo",
+          "entryType": "entrada · {kind}",
+          "metadata": "Metadatos",
+          "files": "Archivos",
+          "emptyGroup": "Este grupo está vacío.",
+          "githubPublicKeyTitle": "Clave SSH pública para GitHub",
+          "githubPublicKeyCopied": "Clave pública de GitHub copiada",
+          "copyForGithub": "Copiar para GitHub",
+          "exportPub": "Exportar .pub",
+          "artifactCopied": "{artifactName} copiado",
+          "copy": "Copiar",
+          "export": "Exportar"
+        },
+        "keygen": {
+          "title": "Generar / guardar clave",
+          "preset": "Perfil",
+          "entryName": "Nombre de la entrada",
+          "commentLabel": "Comentario / cuenta / email",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "Tamaño del módulo RSA",
+          "bits": "{bits} bit",
+          "bitcoinNetwork": "Red Bitcoin",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Clave pública comprimida",
+          "compressedRecommended": "Recomendado para monederos Bitcoin modernos",
+          "entropySize": "Entropía / tamaño",
+          "encoding": "Codificación",
+          "algorithm": "Algoritmo",
+          "rawEncoding": "Codificación de clave raw",
+          "compressedSec1": "Clave pública SEC1 comprimida",
+          "githubToken": "Token de GitHub",
+          "githubTokenHelp": "GitHub emite este token; {appName} lo almacena pero no lo genera.",
+          "hideToken": "Ocultar token",
+          "showToken": "Mostrar token",
+          "errors": {
+            "entryNameRequired": "Se requiere un nombre de entrada.",
+            "tokenRequired": "Pega el token emitido por GitHub."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "Clave de autenticación OpenSSH para GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "Clave RSA OpenSSH para GitHub; tamaño de módulo configurable",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Par genérico privado/público OpenSSH Ed25519",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Par genérico OpenSSH RSA con tamaño configurable",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "Par de claves de 64 bytes en JSON + dirección Base58",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Claves X25519 privada/pública en Base64",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Clave de destinatario dedicada para cifrado de archivos KWVLOCK",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Clave privada, clave pública SEC1 y dirección EIP-55",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Clave privada/pública y dirección TRON Base58Check",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "Clave privada WIF + dirección P2PKH",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Token aleatorio",
+              "description": "Secreto criptográficamente aleatorio con tamaño configurable",
+              "defaultName": "Token aleatorio"
+            },
+            "customKey": {
+              "label": "Par de claves personalizado",
+              "description": "Par raw configurable Ed/X25519, EC o RSA",
+              "defaultName": "Clave personalizada"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Guardar un PAT/token de autenticación emitido por GitHub",
+              "defaultName": "Token de GitHub"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Algoritmo",
+          "bits": "Bits",
+          "address": "Dirección",
+          "encoding": "Codificación",
+          "purpose": "Propósito",
+          "network": "Red",
+          "compressed": "Comprimida",
+          "source": "Origen",
+          "format": "Formato",
+          "compressed_public_key": "Clave pública comprimida"
+        },
+        "fileDialogs": {
+          "importVault": "Importar almacén de {appName}",
+          "importFile": "Importar archivo en {appName}",
+          "exportVault": "Exportar almacén cifrado de {appName}",
+          "exportFile": "Exportar {fileName}",
+          "openLockedFile": "Abrir archivo KWVLOCK cifrado",
+          "chooseFileEncrypt": "Elegir archivo para cifrar",
+          "saveEncryptedFile": "Guardar archivo cifrado",
+          "chooseDirectoryEncrypt": "Elegir directorio para cifrar",
+          "chooseUnlockDestination": "Elegir destino del contenido descifrado"
+        }
+      }
+    },
+    "fr": {
+      "name": "Français",
+      "locale": "fr-FR",
+      "strings": {
+        "language": {
+          "label": "Langue"
+        },
+        "common": {
+          "cancel": "Annuler",
+          "ok": "OK",
+          "save": "Enregistrer",
+          "delete": "Supprimer",
+          "rename": "Renommer",
+          "create": "Créer",
+          "open": "Ouvrir",
+          "import": "Importer",
+          "export": "Exporter",
+          "copy": "Copier",
+          "store": "Enregistrer",
+          "generate": "Générer",
+          "file": "Fichier",
+          "directory": "Dossier",
+          "source": "Source",
+          "method": "Méthode",
+          "name": "Nom",
+          "text": "Texte",
+          "group": "Groupe",
+          "key": "Clé",
+          "files": "Fichiers",
+          "metadata": "Métadonnées",
+          "lock": "Verrouiller",
+          "decrypt": "Déchiffrer"
+        },
+        "unlock": {
+          "titleUnlock": "Déverrouiller {appName}",
+          "titleCreate": "Créer {appName}",
+          "descriptionUnlock": "Saisissez le mot de passe maître du coffre chiffré local.",
+          "descriptionCreate": "Créez un mot de passe maître ou importez un fichier .kwvault existant.",
+          "masterPassword": "Mot de passe maître",
+          "importVault": "Importer .kwvault"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Mot de passe incorrect ou coffre endommagé.",
+          "passwordBeforeImport": "Saisissez d’abord le mot de passe du .kwvault.",
+          "exported": "Coffre chiffré exporté",
+          "exportFailed": "Échec de l’export : {error}",
+          "importTitle": "Importer {fileName}",
+          "importReplaceWarning": "Le coffre local n’est remplacé qu’après le déchiffrement et la validation réussis du fichier importé.",
+          "importPassword": "Mot de passe maître du coffre importé",
+          "notUnlocked": "Le coffre n’est pas déverrouillé"
+        },
+        "wallet": {
+          "operationFailed": "Échec de l’opération : {error}",
+          "revision": "KWV1 · rév. {revision}",
+          "importVault": "Importer le coffre",
+          "exportVault": "Exporter le coffre",
+          "importEncryptedVaultTooltip": "Importer un coffre chiffré",
+          "exportEncryptedVaultTooltip": "Exporter un coffre chiffré",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Verrouiller"
+        },
+        "groupEditor": {
+          "newTitle": "Nouveau groupe",
+          "nameLabel": "Nom du groupe"
+        },
+        "secretEditor": {
+          "newTitle": "Nouveau texte / secret",
+          "nameLabel": "Nom",
+          "textLabel": "Texte / secret"
+        },
+        "importKey": {
+          "wrongVault": "Ceci est un coffre {appName}. Utilisez « Importer le coffre » dans la barre supérieure."
+        },
+        "lockFile": {
+          "noEncryptionKey": "Aucune clé de chiffrement X25519 trouvée. Créez d’abord « File Lock · X25519 ».",
+          "encrypted": "Chiffré : {path}",
+          "failed": "Échec de LockFile : {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Clé publique du destinataire",
+          "source": "Source",
+          "method": "Méthode",
+          "explanation": "La source est d’abord empaquetée en ZIP. Seule la clé publique est nécessaire pour chiffrer.",
+          "chooseAndEncrypt": "Choisir la source et chiffrer"
+        },
+        "unlockFile": {
+          "noPrivateKey": "Aucune clé privée X25519 n’est disponible dans ce coffre.",
+          "unlockedTo": "Déchiffré vers : {path}",
+          "failed": "Échec de UnlockFile : {error}",
+          "title": "UnlockFile",
+          "fileLabel": "Fichier : {fileName}",
+          "methodLabel": "Méthode : {methodName}",
+          "privateKey": "Clé privée",
+          "matchesRecipient": "{keyLabel} · correspond au destinataire",
+          "noFingerprintMatch": "Aucune empreinte de clé correspondante trouvée. Vous pouvez essayer une autre clé privée X25519.",
+          "matchingSelected": "La clé du destinataire correspondante a été sélectionnée automatiquement.",
+          "decrypt": "Déchiffrer"
+        },
+        "delete": {
+          "title": "Supprimer l’élément ?",
+          "withChildren": "Supprimer « {name} » et tout son contenu ?",
+          "single": "Supprimer « {name} » ?"
+        },
+        "toolbox": {
+          "group": "Groupe",
+          "key": "Clé",
+          "text": "Texte",
+          "importKey": "Importer une clé",
+          "rename": "Renommer",
+          "delete": "Supprimer"
+        },
+        "details": {
+          "groupType": "groupe",
+          "entryType": "entrée · {kind}",
+          "metadata": "Métadonnées",
+          "files": "Fichiers",
+          "emptyGroup": "Ce groupe est vide.",
+          "githubPublicKeyTitle": "Clé SSH publique pour GitHub",
+          "githubPublicKeyCopied": "Clé publique GitHub copiée",
+          "copyForGithub": "Copier pour GitHub",
+          "exportPub": "Exporter .pub",
+          "artifactCopied": "{artifactName} copié",
+          "copy": "Copier",
+          "export": "Exporter"
+        },
+        "keygen": {
+          "title": "Générer / enregistrer une clé",
+          "preset": "Profil",
+          "entryName": "Nom de l’entrée",
+          "commentLabel": "Commentaire / compte / e-mail",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "Taille du module RSA",
+          "bits": "{bits} bits",
+          "bitcoinNetwork": "Réseau Bitcoin",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Clé publique compressée",
+          "compressedRecommended": "Recommandé pour les portefeuilles Bitcoin modernes",
+          "entropySize": "Entropie / taille",
+          "encoding": "Encodage",
+          "algorithm": "Algorithme",
+          "rawEncoding": "Encodage de la clé raw",
+          "compressedSec1": "Clé publique SEC1 compressée",
+          "githubToken": "Jeton GitHub",
+          "githubTokenHelp": "GitHub émet ce jeton ; {appName} le stocke mais ne le génère pas.",
+          "hideToken": "Masquer le jeton",
+          "showToken": "Afficher le jeton",
+          "errors": {
+            "entryNameRequired": "Le nom de l’entrée est obligatoire.",
+            "tokenRequired": "Collez le jeton émis par GitHub."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "Clé d’authentification OpenSSH pour GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "Clé RSA OpenSSH pour GitHub ; taille de module configurable",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Paire générique privée/publique OpenSSH Ed25519",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Paire générique OpenSSH RSA à taille configurable",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "Paire de clés de 64 octets en JSON + adresse Base58",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Clés X25519 privée/publique en Base64",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Clé destinataire dédiée au chiffrement de fichiers KWVLOCK",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Clé privée, clé publique SEC1 et adresse EIP-55",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Clé privée/publique et adresse TRON Base58Check",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "Clé privée WIF + adresse P2PKH",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Jeton aléatoire",
+              "description": "Secret cryptographiquement aléatoire à taille configurable",
+              "defaultName": "Jeton aléatoire"
+            },
+            "customKey": {
+              "label": "Paire de clés personnalisée",
+              "description": "Paire raw configurable Ed/X25519, EC ou RSA",
+              "defaultName": "Clé personnalisée"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Stocker un PAT/jeton d’authentification émis par GitHub",
+              "defaultName": "Jeton GitHub"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Algorithme",
+          "bits": "Bits",
+          "address": "Adresse",
+          "encoding": "Encodage",
+          "purpose": "Usage",
+          "network": "Réseau",
+          "compressed": "Compressée",
+          "source": "Source",
+          "format": "Format",
+          "compressed_public_key": "Clé publique compressée"
+        },
+        "fileDialogs": {
+          "importVault": "Importer le coffre {appName}",
+          "importFile": "Importer un fichier dans {appName}",
+          "exportVault": "Exporter le coffre {appName} chiffré",
+          "exportFile": "Exporter {fileName}",
+          "openLockedFile": "Ouvrir un fichier KWVLOCK chiffré",
+          "chooseFileEncrypt": "Choisir le fichier à chiffrer",
+          "saveEncryptedFile": "Enregistrer le fichier chiffré",
+          "chooseDirectoryEncrypt": "Choisir le dossier à chiffrer",
+          "chooseUnlockDestination": "Choisir la destination du contenu déchiffré"
+        }
+      }
+    },
+    "ua": {
+      "name": "Українська",
+      "locale": "uk-UA",
+      "strings": {
+        "language": {
+          "label": "Мова"
+        },
+        "common": {
+          "cancel": "Скасувати",
+          "ok": "OK",
+          "save": "Зберегти",
+          "delete": "Видалити",
+          "rename": "Перейменувати",
+          "create": "Створити",
+          "open": "Відкрити",
+          "import": "Імпортувати",
+          "export": "Експортувати",
+          "copy": "Копіювати",
+          "store": "Зберегти",
+          "generate": "Згенерувати",
+          "file": "Файл",
+          "directory": "Каталог",
+          "source": "Джерело",
+          "method": "Метод",
+          "name": "Назва",
+          "text": "Текст",
+          "group": "Група",
+          "key": "Ключ",
+          "files": "Файли",
+          "metadata": "Метадані",
+          "lock": "Заблокувати",
+          "decrypt": "Розшифрувати"
+        },
+        "unlock": {
+          "titleUnlock": "Розблокувати {appName}",
+          "titleCreate": "Створити {appName}",
+          "descriptionUnlock": "Введіть головний пароль для локального зашифрованого сховища.",
+          "descriptionCreate": "Створіть головний пароль або імпортуйте наявний файл .kwvault.",
+          "masterPassword": "Головний пароль",
+          "importVault": "Імпортувати .kwvault"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Неправильний пароль або пошкоджене сховище.",
+          "passwordBeforeImport": "Спочатку введіть пароль від .kwvault.",
+          "exported": "Зашифроване сховище експортовано",
+          "exportFailed": "Не вдалося експортувати: {error}",
+          "importTitle": "Імпорт {fileName}",
+          "importReplaceWarning": "Локальне сховище буде замінено лише після успішного розшифрування та перевірки імпортованого файла.",
+          "importPassword": "Головний пароль імпортованого сховища",
+          "notUnlocked": "Сховище не розблоковано"
+        },
+        "wallet": {
+          "operationFailed": "Операцію не виконано: {error}",
+          "revision": "KWV1 · рев. {revision}",
+          "importVault": "Імпортувати сховище",
+          "exportVault": "Експортувати сховище",
+          "importEncryptedVaultTooltip": "Імпортувати зашифроване сховище",
+          "exportEncryptedVaultTooltip": "Експортувати зашифроване сховище",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Заблокувати"
+        },
+        "groupEditor": {
+          "newTitle": "Нова група",
+          "nameLabel": "Назва групи"
+        },
+        "secretEditor": {
+          "newTitle": "Новий текст / секрет",
+          "nameLabel": "Назва",
+          "textLabel": "Текст / секрет"
+        },
+        "importKey": {
+          "wrongVault": "Це сховище {appName}. Використовуйте «Імпортувати сховище» у верхній панелі."
+        },
+        "lockFile": {
+          "noEncryptionKey": "Ключ X25519 для шифрування не знайдено. Спочатку створіть «File Lock · X25519».",
+          "encrypted": "Зашифровано: {path}",
+          "failed": "Помилка LockFile: {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Публічний ключ одержувача",
+          "source": "Джерело",
+          "method": "Метод",
+          "explanation": "Джерело спочатку пакується у ZIP. Для шифрування потрібен лише публічний ключ.",
+          "chooseAndEncrypt": "Вибрати джерело й зашифрувати"
+        },
+        "unlockFile": {
+          "noPrivateKey": "У цьому сховищі немає доступного приватного ключа X25519.",
+          "unlockedTo": "Розшифровано до: {path}",
+          "failed": "Помилка UnlockFile: {error}",
+          "title": "UnlockFile",
+          "fileLabel": "Файл: {fileName}",
+          "methodLabel": "Метод: {methodName}",
+          "privateKey": "Приватний ключ",
+          "matchesRecipient": "{keyLabel} · відповідає одержувачу",
+          "noFingerprintMatch": "Збіг відбитка ключа не знайдено. Можна спробувати інший приватний ключ X25519.",
+          "matchingSelected": "Відповідний ключ одержувача вибрано автоматично.",
+          "decrypt": "Розшифрувати"
+        },
+        "delete": {
+          "title": "Видалити елемент?",
+          "withChildren": "Видалити «{name}» та весь його вміст?",
+          "single": "Видалити «{name}»?"
+        },
+        "toolbox": {
+          "group": "Група",
+          "key": "Ключ",
+          "text": "Текст",
+          "importKey": "Імпортувати ключ",
+          "rename": "Перейменувати",
+          "delete": "Видалити"
+        },
+        "details": {
+          "groupType": "група",
+          "entryType": "запис · {kind}",
+          "metadata": "Метадані",
+          "files": "Файли",
+          "emptyGroup": "Ця група порожня.",
+          "githubPublicKeyTitle": "Публічний SSH-ключ для GitHub",
+          "githubPublicKeyCopied": "Публічний ключ GitHub скопійовано",
+          "copyForGithub": "Копіювати для GitHub",
+          "exportPub": "Експортувати .pub",
+          "artifactCopied": "{artifactName} скопійовано",
+          "copy": "Копіювати",
+          "export": "Експортувати"
+        },
+        "keygen": {
+          "title": "Згенерувати / зберегти ключ",
+          "preset": "Профіль",
+          "entryName": "Назва запису",
+          "commentLabel": "Коментар / обліковий запис / email",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "Розмір модуля RSA",
+          "bits": "{bits} біт",
+          "bitcoinNetwork": "Мережа Bitcoin",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Стиснений публічний ключ",
+          "compressedRecommended": "Рекомендовано для сучасних Bitcoin-гаманців",
+          "entropySize": "Ентропія / розмір",
+          "encoding": "Кодування",
+          "algorithm": "Алгоритм",
+          "rawEncoding": "Кодування raw-ключа",
+          "compressedSec1": "Стиснений публічний ключ SEC1",
+          "githubToken": "Токен GitHub",
+          "githubTokenHelp": "GitHub видає цей токен; {appName} зберігає його, але не генерує.",
+          "hideToken": "Приховати токен",
+          "showToken": "Показати токен",
+          "errors": {
+            "entryNameRequired": "Потрібно вказати назву запису.",
+            "tokenRequired": "Вставте токен, виданий GitHub."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "Ключ автентифікації OpenSSH для GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "RSA-ключ OpenSSH для GitHub із налаштовуваним розміром модуля",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Універсальна пара приватного/публічного ключів OpenSSH Ed25519",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Універсальна пара ключів OpenSSH RSA з налаштовуваним розміром",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "64-байтова пара ключів у JSON + Base58-адреса",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Приватний/публічний ключі X25519 у Base64",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Окремий ключ одержувача для шифрування файлів KWVLOCK",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Приватний ключ, публічний ключ SEC1 та адреса EIP-55",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Приватний/публічний ключ та Base58Check-адреса TRON",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "Приватний ключ WIF + адреса P2PKH",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Випадковий токен",
+              "description": "Криптографічно випадковий секрет із налаштовуваним розміром",
+              "defaultName": "Випадковий токен"
+            },
+            "customKey": {
+              "label": "Власна пара ключів",
+              "description": "Налаштовувана пара raw Ed/X25519, EC або RSA",
+              "defaultName": "Власний ключ"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Зберегти PAT/auth-токен, виданий GitHub",
+              "defaultName": "Токен GitHub"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Алгоритм",
+          "bits": "Біти",
+          "address": "Адреса",
+          "encoding": "Кодування",
+          "purpose": "Призначення",
+          "network": "Мережа",
+          "compressed": "Стиснений",
+          "source": "Джерело",
+          "format": "Формат",
+          "compressed_public_key": "Стиснений публічний ключ"
+        },
+        "fileDialogs": {
+          "importVault": "Імпортувати сховище {appName}",
+          "importFile": "Імпортувати файл у {appName}",
+          "exportVault": "Експортувати зашифроване сховище {appName}",
+          "exportFile": "Експортувати {fileName}",
+          "openLockedFile": "Відкрити зашифрований файл KWVLOCK",
+          "chooseFileEncrypt": "Вибрати файл для шифрування",
+          "saveEncryptedFile": "Зберегти зашифрований файл",
+          "chooseDirectoryEncrypt": "Вибрати каталог для шифрування",
+          "chooseUnlockDestination": "Вибрати місце для розшифрованого вмісту"
+        }
+      }
+    },
+    "it": {
+      "name": "Italiano",
+      "locale": "it-IT",
+      "strings": {
+        "language": {
+          "label": "Lingua"
+        },
+        "common": {
+          "cancel": "Annulla",
+          "ok": "OK",
+          "save": "Salva",
+          "delete": "Elimina",
+          "rename": "Rinomina",
+          "create": "Crea",
+          "open": "Apri",
+          "import": "Importa",
+          "export": "Esporta",
+          "copy": "Copia",
+          "store": "Salva",
+          "generate": "Genera",
+          "file": "File",
+          "directory": "Directory",
+          "source": "Origine",
+          "method": "Metodo",
+          "name": "Nome",
+          "text": "Testo",
+          "group": "Gruppo",
+          "key": "Chiave",
+          "files": "File",
+          "metadata": "Metadati",
+          "lock": "Blocca",
+          "decrypt": "Decifra"
+        },
+        "unlock": {
+          "titleUnlock": "Sblocca {appName}",
+          "titleCreate": "Crea {appName}",
+          "descriptionUnlock": "Inserisci la password principale del vault cifrato locale.",
+          "descriptionCreate": "Crea una password principale oppure importa un file .kwvault esistente.",
+          "masterPassword": "Password principale",
+          "importVault": "Importa .kwvault"
+        },
+        "vault": {
+          "wrongPasswordOrDamaged": "Password errata o vault danneggiato.",
+          "passwordBeforeImport": "Inserisci prima la password del .kwvault.",
+          "exported": "Vault cifrato esportato",
+          "exportFailed": "Esportazione non riuscita: {error}",
+          "importTitle": "Importa {fileName}",
+          "importReplaceWarning": "Il vault locale viene sostituito solo dopo che il file importato è stato decifrato e validato correttamente.",
+          "importPassword": "Password principale del vault importato",
+          "notUnlocked": "Il vault non è sbloccato"
+        },
+        "wallet": {
+          "operationFailed": "Operazione non riuscita: {error}",
+          "revision": "KWV1 · rev. {revision}",
+          "importVault": "Importa vault",
+          "exportVault": "Esporta vault",
+          "importEncryptedVaultTooltip": "Importa vault cifrato",
+          "exportEncryptedVaultTooltip": "Esporta vault cifrato",
+          "lockFile": "LockFile",
+          "unlockFile": "UnlockFile",
+          "lock": "Blocca"
+        },
+        "groupEditor": {
+          "newTitle": "Nuovo gruppo",
+          "nameLabel": "Nome gruppo"
+        },
+        "secretEditor": {
+          "newTitle": "Nuovo testo / segreto",
+          "nameLabel": "Nome",
+          "textLabel": "Testo / segreto"
+        },
+        "importKey": {
+          "wrongVault": "Questo è un vault {appName}. Usa «Importa vault» nella barra superiore."
+        },
+        "lockFile": {
+          "noEncryptionKey": "Nessuna chiave X25519 di cifratura trovata. Crea prima «File Lock · X25519».",
+          "encrypted": "Cifrato: {path}",
+          "failed": "LockFile non riuscito: {error}",
+          "title": "LockFile",
+          "recipientPublicKey": "Chiave pubblica del destinatario",
+          "source": "Origine",
+          "method": "Metodo",
+          "explanation": "L’origine viene prima compressa come ZIP. Per cifrare serve solo la chiave pubblica.",
+          "chooseAndEncrypt": "Scegli origine e cifra"
+        },
+        "unlockFile": {
+          "noPrivateKey": "In questo vault non è disponibile alcuna chiave privata X25519.",
+          "unlockedTo": "Decifrato in: {path}",
+          "failed": "UnlockFile non riuscito: {error}",
+          "title": "UnlockFile",
+          "fileLabel": "File: {fileName}",
+          "methodLabel": "Metodo: {methodName}",
+          "privateKey": "Chiave privata",
+          "matchesRecipient": "{keyLabel} · corrisponde al destinatario",
+          "noFingerprintMatch": "Nessuna impronta chiave corrispondente trovata. Puoi provare un’altra chiave privata X25519.",
+          "matchingSelected": "La chiave destinatario corrispondente è stata selezionata automaticamente.",
+          "decrypt": "Decifra"
+        },
+        "delete": {
+          "title": "Eliminare l’elemento?",
+          "withChildren": "Eliminare «{name}» e tutto il suo contenuto?",
+          "single": "Eliminare «{name}»?"
+        },
+        "toolbox": {
+          "group": "Gruppo",
+          "key": "Chiave",
+          "text": "Testo",
+          "importKey": "Importa chiave",
+          "rename": "Rinomina",
+          "delete": "Elimina"
+        },
+        "details": {
+          "groupType": "gruppo",
+          "entryType": "voce · {kind}",
+          "metadata": "Metadati",
+          "files": "File",
+          "emptyGroup": "Questo gruppo è vuoto.",
+          "githubPublicKeyTitle": "Chiave SSH pubblica per GitHub",
+          "githubPublicKeyCopied": "Chiave pubblica GitHub copiata",
+          "copyForGithub": "Copia per GitHub",
+          "exportPub": "Esporta .pub",
+          "artifactCopied": "{artifactName} copiato",
+          "copy": "Copia",
+          "export": "Esporta"
+        },
+        "keygen": {
+          "title": "Genera / salva chiave",
+          "preset": "Profilo",
+          "entryName": "Nome voce",
+          "commentLabel": "Commento / account / email",
+          "commentHint": "user@example.com",
+          "rsaModulusSize": "Dimensione modulo RSA",
+          "bits": "{bits} bit",
+          "bitcoinNetwork": "Rete Bitcoin",
+          "mainnet": "Mainnet",
+          "testnet": "Testnet",
+          "compressedPublicKey": "Chiave pubblica compressa",
+          "compressedRecommended": "Consigliata per i wallet Bitcoin moderni",
+          "entropySize": "Entropia / dimensione",
+          "encoding": "Codifica",
+          "algorithm": "Algoritmo",
+          "rawEncoding": "Codifica chiave raw",
+          "compressedSec1": "Chiave pubblica SEC1 compressa",
+          "githubToken": "Token GitHub",
+          "githubTokenHelp": "GitHub emette questo token; {appName} lo memorizza ma non lo genera.",
+          "hideToken": "Nascondi token",
+          "showToken": "Mostra token",
+          "errors": {
+            "entryNameRequired": "Il nome della voce è obbligatorio.",
+            "tokenRequired": "Incolla il token emesso da GitHub."
+          },
+          "presets": {
+            "githubSshEd25519": {
+              "label": "GitHub · SSH Ed25519",
+              "description": "Chiave di autenticazione OpenSSH per GitHub",
+              "defaultName": "GitHub SSH Ed25519"
+            },
+            "githubSshRsa": {
+              "label": "GitHub · SSH RSA",
+              "description": "Chiave RSA OpenSSH per GitHub; dimensione modulo configurabile",
+              "defaultName": "GitHub SSH RSA"
+            },
+            "sshEd25519": {
+              "label": "SSH · Ed25519",
+              "description": "Coppia generica privata/pubblica OpenSSH Ed25519",
+              "defaultName": "SSH Ed25519"
+            },
+            "sshRsa": {
+              "label": "SSH · RSA",
+              "description": "Coppia generica OpenSSH RSA con dimensione configurabile",
+              "defaultName": "SSH RSA"
+            },
+            "solanaEd25519": {
+              "label": "Solana · Ed25519",
+              "description": "Coppia di chiavi da 64 byte in JSON + indirizzo Base58",
+              "defaultName": "Solana"
+            },
+            "wireGuardX25519": {
+              "label": "WireGuard · X25519",
+              "description": "Chiavi X25519 privata/pubblica in Base64",
+              "defaultName": "WireGuard"
+            },
+            "fileLockX25519": {
+              "label": "File Lock · X25519",
+              "description": "Chiave destinatario dedicata alla cifratura file KWVLOCK",
+              "defaultName": "File Lock X25519"
+            },
+            "ethereumSecp256k1": {
+              "label": "Ethereum · secp256k1",
+              "description": "Chiave privata, chiave pubblica SEC1 e indirizzo EIP-55",
+              "defaultName": "Ethereum"
+            },
+            "tronSecp256k1": {
+              "label": "TRON · secp256k1",
+              "description": "Chiave privata/pubblica e indirizzo TRON Base58Check",
+              "defaultName": "TRON"
+            },
+            "bitcoinWif": {
+              "label": "Bitcoin · WIF",
+              "description": "Chiave privata WIF + indirizzo P2PKH",
+              "defaultName": "Bitcoin"
+            },
+            "randomToken": {
+              "label": "Token casuale",
+              "description": "Segreto crittograficamente casuale con dimensione configurabile",
+              "defaultName": "Token casuale"
+            },
+            "customKey": {
+              "label": "Coppia di chiavi personalizzata",
+              "description": "Coppia raw configurabile Ed/X25519, EC o RSA",
+              "defaultName": "Chiave personalizzata"
+            },
+            "githubToken": {
+              "label": "GitHub · PAT/auth token",
+              "description": "Memorizza un PAT/token di autenticazione emesso da GitHub",
+              "defaultName": "Token GitHub"
+            }
+          },
+          "encodings": {
+            "hex": "Hex",
+            "base64": "Base64",
+            "base64url": "Base64 URL-safe"
+          },
+          "algorithms": {
+            "ed25519": "Ed25519",
+            "x25519": "X25519",
+            "secp256k1": "EC secp256k1",
+            "secp256r1": "EC P-256 / secp256r1",
+            "secp384r1": "EC P-384 / secp384r1",
+            "secp521r1": "EC P-521 / secp521r1",
+            "rsa": "RSA"
+          }
+        },
+        "metadataLabels": {
+          "algorithm": "Algoritmo",
+          "bits": "Bit",
+          "address": "Indirizzo",
+          "encoding": "Codifica",
+          "purpose": "Scopo",
+          "network": "Rete",
+          "compressed": "Compressa",
+          "source": "Origine",
+          "format": "Formato",
+          "compressed_public_key": "Chiave pubblica compressa"
+        },
+        "fileDialogs": {
+          "importVault": "Importa vault {appName}",
+          "importFile": "Importa file in {appName}",
+          "exportVault": "Esporta vault {appName} cifrato",
+          "exportFile": "Esporta {fileName}",
+          "openLockedFile": "Apri file KWVLOCK cifrato",
+          "chooseFileEncrypt": "Scegli file da cifrare",
+          "saveEncryptedFile": "Salva file cifrato",
+          "chooseDirectoryEncrypt": "Scegli directory da cifrare",
+          "chooseUnlockDestination": "Scegli destinazione del contenuto decifrato"
+        }
+      }
+    }
+  }
+}

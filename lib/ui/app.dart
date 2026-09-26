@@ -1,43 +1,108 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import '../core/vault/vault_repository.dart';
 import '../services/file_service.dart';
+import '../services/language_service.dart';
+import 'language_scope.dart';
 import 'unlock_page.dart';
 import 'wallet_page.dart';
+
+
 
 /// Application shell.
 ///
 /// Important: the stateful controller lives *below* MaterialApp. Dialogs and
 /// snackbars therefore always receive MaterialLocalizations/ScaffoldMessenger.
-class KeyWalletApp extends StatelessWidget {
-  const KeyWalletApp({super.key});
+class WalletWalleyApp extends StatelessWidget {
+  final LanguageService languageService;
+
+  const WalletWalleyApp({
+    super.key,
+    required this.languageService,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'KeyWallet',
-      themeMode: ThemeMode.dark,
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorSchemeSeed: const Color(0xff4d8dff),
-        useMaterial3: true,
-      ),
-      home: const _KeyWalletController(),
+    return ListenableBuilder(
+      listenable: languageService,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+
+          title: languageService.productName,
+
+          locale: _localeFromTag(
+            languageService.currentLanguage.locale,
+          ),
+
+          supportedLocales: [
+            for (final language in languageService.languages)
+              _localeFromTag(language.locale),
+          ],
+
+          localizationsDelegates:
+          GlobalMaterialLocalizations.delegates,
+
+          themeMode: ThemeMode.dark,
+
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            colorSchemeSeed: const Color(0xff4d8dff),
+            useMaterial3: true,
+          ),
+
+          builder: (context, child) {
+            return LanguageScope(
+              service: languageService,
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
+
+          home: const _WalletWalleyController(),
+        );
+      },
+    );
+  }
+
+  Locale _localeFromTag(String tag) {
+    final parts = tag.replaceAll('_', '-').split('-');
+
+    final languageCode = parts.first;
+
+    String? scriptCode;
+    String? countryCode;
+
+    if (parts.length >= 2) {
+      if (parts[1].length == 4) {
+        scriptCode = parts[1];
+      } else {
+        countryCode = parts[1];
+      }
+    }
+
+    if (parts.length >= 3) {
+      countryCode = parts[2];
+    }
+
+    return Locale.fromSubtags(
+      languageCode: languageCode,
+      scriptCode: scriptCode,
+      countryCode: countryCode,
     );
   }
 }
 
-class _KeyWalletController extends StatefulWidget {
-  const _KeyWalletController();
+class _WalletWalleyController extends StatefulWidget {
+  const _WalletWalleyController();
 
   @override
-  State<_KeyWalletController> createState() => _KeyWalletControllerState();
+  State<_WalletWalleyController> createState() => _WalletWalleyControllerState();
 }
 
-class _KeyWalletControllerState extends State<_KeyWalletController> {
+class _WalletWalleyControllerState
+    extends State<_WalletWalleyController> {
   final VaultRepository _repository = VaultRepository();
 
   bool _loading = true;

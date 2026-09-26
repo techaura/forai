@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'language_dropdown.dart';
 
 class UnlockPage extends StatefulWidget {
   final bool hasVault;
@@ -55,6 +56,11 @@ class _UnlockPageState extends State<UnlockPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: LanguageDropdown(),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     widget.hasVault ? 'Unlock KeyWallet' : 'Create KeyWallet',
                     style: Theme.of(context).textTheme.headlineSmall,
