@@ -163,10 +163,22 @@ class _WalletWalleyControllerState
   }
 
   String _friendlyError(Object error) {
+    final languageService = LanguageScope.of(context);
     final text = error.toString();
+
     if (text.contains('Wrong password')) {
-      return 'Wrong password or damaged vault.';
+      return languageService.text('vault.wrongPasswordOrDamaged');
     }
+    if (text.contains('Master password must not be empty')) {
+      return languageService.text('vault.masterPasswordEmpty');
+    }
+    if (text.contains('Local KeyWallet vault does not exist')) {
+      return languageService.text('vault.localVaultMissing');
+    }
+    if (text.contains('Vault is not unlocked')) {
+      return languageService.text('vault.notUnlocked');
+    }
+
     return text;
   }
 
@@ -185,11 +197,18 @@ class _WalletWalleyControllerState
   }
 
   Future<void> _import(String password) async {
+    final languageService = LanguageScope.of(context);
+
     if (password.isEmpty) {
-      setState(() => _error = 'Enter the password of the .kwvault first.');
+      setState(
+        () => _error = languageService.text('vault.passwordBeforeImport'),
+      );
       return;
     }
-    final picked = await FileService.pickVault();
+
+    final picked = await FileService.pickVault(
+      dialogTitle: languageService.text('fileDialogs.importVault'),
+    );
     if (picked == null) return;
     await _run(
       () => _repository.importPortable(picked.bytes, password),
@@ -198,32 +217,52 @@ class _WalletWalleyControllerState
   }
 
   Future<void> _export() async {
+    final languageService = LanguageScope.of(context);
+
     try {
       final Uint8List raw = await _repository.readRaw();
-      await FileService.saveVault(raw);
+      await FileService.saveVault(
+        raw,
+        dialogTitle: languageService.text('fileDialogs.exportVault'),
+      );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Encrypted vault exported')),
+        SnackBar(content: Text(languageService.text('vault.exported'))),
       );
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Export failed: $error')),
+        SnackBar(
+          content: Text(
+            languageService.text(
+              'vault.exportFailed',
+              parameters: {'error': error},
+            ),
+          ),
+        ),
       );
     }
   }
 
   Future<void> _importFromWorkspace() async {
-    final picked = await FileService.pickVault();
+    final languageService = LanguageScope.of(context);
+    final picked = await FileService.pickVault(
+      dialogTitle: languageService.text('fileDialogs.importVault'),
+    );
     if (picked == null || !mounted) return;
     await _importPickedVault(picked);
   }
 
   Future<void> _importPickedVault(PickedVaultFile picked) async {
     if (!mounted) return;
+
+    final languageService = LanguageScope.of(context);
     final password = await _askPassword(
-      title: 'Import ${picked.name}',
-      message: 'This replaces the local vault only after the imported file is successfully decrypted and validated.',
+      title: languageService.text(
+        'vault.importTitle',
+        parameters: {'fileName': picked.name},
+      ),
+      message: languageService.text('vault.importReplaceWarning'),
     );
     if (password == null || password.isEmpty) return;
 
@@ -237,6 +276,7 @@ class _WalletWalleyControllerState
     required String title,
     required String message,
   }) async {
+    final languageService = LanguageScope.of(context);
     // Do not create/dispose a TextEditingController around showDialog().
     // showDialog's Future completes when Navigator.pop() is called, while the
     // dialog route may still be rebuilding during its exit animation. Disposing
@@ -264,7 +304,7 @@ class _WalletWalleyControllerState
                   obscureText: obscure,
                   onChanged: (value) => password = value,
                   decoration: InputDecoration(
-                    labelText: 'Master password of imported vault',
+                    labelText: languageService.text('vault.importPassword'),
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       onPressed: () => setDialogState(() => obscure = !obscure),
@@ -279,11 +319,11 @@ class _WalletWalleyControllerState
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Cancel'),
+              child: Text(languageService.text('common.cancel')),
             ),
             FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(password),
-              child: const Text('Import'),
+              child: Text(languageService.text('common.import')),
             ),
           ],
         ),

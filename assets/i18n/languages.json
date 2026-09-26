@@ -55,7 +55,9 @@
           "importTitle": "{fileName} importieren",
           "importReplaceWarning": "Der lokale Tresor wird erst ersetzt, nachdem die importierte Datei erfolgreich entschlüsselt und validiert wurde.",
           "importPassword": "Master-Passwort des importierten Tresors",
-          "notUnlocked": "Tresor ist nicht entsperrt"
+          "notUnlocked": "Tresor ist nicht entsperrt",
+          "masterPasswordEmpty": "Master-Passwort darf nicht leer sein.",
+          "localVaultMissing": "Der lokale WalletWalley-Tresor ist nicht vorhanden."
         },
         "wallet": {
           "operationFailed": "Vorgang fehlgeschlagen: {error}",
@@ -66,7 +68,9 @@
           "exportEncryptedVaultTooltip": "Verschlüsselten Tresor exportieren",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Sperren"
+          "lock": "Sperren",
+          "lockFileTooltip": "Datei oder Verzeichnis verschlüsseln",
+          "unlockFileTooltip": "KWVLOCK-Datei entschlüsseln"
         },
         "groupEditor": {
           "newTitle": "Neue Gruppe",
@@ -129,7 +133,22 @@
           "exportPub": ".pub exportieren",
           "artifactCopied": "{artifactName} kopiert",
           "copy": "Kopieren",
-          "export": "Exportieren"
+          "export": "Exportieren",
+          "kinds": {
+            "text": "Text",
+            "file": "Datei",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Zufallstoken",
+            "github-token": "GitHub-Token",
+            "custom-key": "Benutzerdefinierter Schlüssel"
+          }
         },
         "keygen": {
           "title": "Schlüssel generieren / speichern",
@@ -261,6 +280,12 @@
           "saveEncryptedFile": "Verschlüsselte Datei speichern",
           "chooseDirectoryEncrypt": "Verzeichnis zum Verschlüsseln wählen",
           "chooseUnlockDestination": "Ziel für entschlüsselten Inhalt wählen"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "KWVLOCK-Dateiverschlüsselung",
+          "issuedByGitHub": "von GitHub ausgegeben",
+          "true": "Ja",
+          "false": "Nein"
         }
       }
     },
@@ -313,7 +338,9 @@
           "importTitle": "Import {fileName}",
           "importReplaceWarning": "This replaces the local vault only after the imported file is successfully decrypted and validated.",
           "importPassword": "Master password of imported vault",
-          "notUnlocked": "Vault is not unlocked"
+          "notUnlocked": "Vault is not unlocked",
+          "masterPasswordEmpty": "Master password must not be empty.",
+          "localVaultMissing": "The local WalletWalley vault does not exist."
         },
         "wallet": {
           "operationFailed": "Operation failed: {error}",
@@ -324,7 +351,9 @@
           "exportEncryptedVaultTooltip": "Export encrypted vault",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Lock"
+          "lock": "Lock",
+          "lockFileTooltip": "Encrypt a file or directory",
+          "unlockFileTooltip": "Decrypt a KWVLOCK file"
         },
         "groupEditor": {
           "newTitle": "New group",
@@ -387,7 +416,22 @@
           "exportPub": "Export .pub",
           "artifactCopied": "{artifactName} copied",
           "copy": "Copy",
-          "export": "Export"
+          "export": "Export",
+          "kinds": {
+            "text": "Text",
+            "file": "File",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Random token",
+            "github-token": "GitHub token",
+            "custom-key": "Custom key"
+          }
         },
         "keygen": {
           "title": "Generate / store key",
@@ -519,6 +563,12 @@
           "saveEncryptedFile": "Save encrypted file",
           "chooseDirectoryEncrypt": "Choose directory to encrypt",
           "chooseUnlockDestination": "Choose destination for unlocked content"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "KWVLOCK file encryption",
+          "issuedByGitHub": "issued by GitHub",
+          "true": "Yes",
+          "false": "No"
         }
       }
     },
@@ -571,7 +621,9 @@
           "importTitle": "Importar {fileName}",
           "importReplaceWarning": "El almacén local solo se sustituirá después de descifrar y validar correctamente el archivo importado.",
           "importPassword": "Contraseña maestra del almacén importado",
-          "notUnlocked": "El almacén no está desbloqueado"
+          "notUnlocked": "El almacén no está desbloqueado",
+          "masterPasswordEmpty": "La contraseña maestra no puede estar vacía.",
+          "localVaultMissing": "El almacén local de WalletWalley no existe."
         },
         "wallet": {
           "operationFailed": "La operación falló: {error}",
@@ -582,7 +634,9 @@
           "exportEncryptedVaultTooltip": "Exportar almacén cifrado",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Bloquear"
+          "lock": "Bloquear",
+          "lockFileTooltip": "Cifrar un archivo o directorio",
+          "unlockFileTooltip": "Descifrar un archivo KWVLOCK"
         },
         "groupEditor": {
           "newTitle": "Nuevo grupo",
@@ -645,7 +699,22 @@
           "exportPub": "Exportar .pub",
           "artifactCopied": "{artifactName} copiado",
           "copy": "Copiar",
-          "export": "Exportar"
+          "export": "Exportar",
+          "kinds": {
+            "text": "Texto",
+            "file": "Archivo",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Token aleatorio",
+            "github-token": "Token de GitHub",
+            "custom-key": "Clave personalizada"
+          }
         },
         "keygen": {
           "title": "Generar / guardar clave",
@@ -777,6 +846,12 @@
           "saveEncryptedFile": "Guardar archivo cifrado",
           "chooseDirectoryEncrypt": "Elegir directorio para cifrar",
           "chooseUnlockDestination": "Elegir destino del contenido descifrado"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "Cifrado de archivos KWVLOCK",
+          "issuedByGitHub": "emitido por GitHub",
+          "true": "Sí",
+          "false": "No"
         }
       }
     },
@@ -829,7 +904,9 @@
           "importTitle": "Importer {fileName}",
           "importReplaceWarning": "Le coffre local n’est remplacé qu’après le déchiffrement et la validation réussis du fichier importé.",
           "importPassword": "Mot de passe maître du coffre importé",
-          "notUnlocked": "Le coffre n’est pas déverrouillé"
+          "notUnlocked": "Le coffre n’est pas déverrouillé",
+          "masterPasswordEmpty": "Le mot de passe maître ne doit pas être vide.",
+          "localVaultMissing": "Le coffre local WalletWalley n’existe pas."
         },
         "wallet": {
           "operationFailed": "Échec de l’opération : {error}",
@@ -840,7 +917,9 @@
           "exportEncryptedVaultTooltip": "Exporter un coffre chiffré",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Verrouiller"
+          "lock": "Verrouiller",
+          "lockFileTooltip": "Chiffrer un fichier ou un dossier",
+          "unlockFileTooltip": "Déchiffrer un fichier KWVLOCK"
         },
         "groupEditor": {
           "newTitle": "Nouveau groupe",
@@ -903,7 +982,22 @@
           "exportPub": "Exporter .pub",
           "artifactCopied": "{artifactName} copié",
           "copy": "Copier",
-          "export": "Exporter"
+          "export": "Exporter",
+          "kinds": {
+            "text": "Texte",
+            "file": "Fichier",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Jeton aléatoire",
+            "github-token": "Jeton GitHub",
+            "custom-key": "Clé personnalisée"
+          }
         },
         "keygen": {
           "title": "Générer / enregistrer une clé",
@@ -1035,6 +1129,12 @@
           "saveEncryptedFile": "Enregistrer le fichier chiffré",
           "chooseDirectoryEncrypt": "Choisir le dossier à chiffrer",
           "chooseUnlockDestination": "Choisir la destination du contenu déchiffré"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "Chiffrement de fichiers KWVLOCK",
+          "issuedByGitHub": "émis par GitHub",
+          "true": "Oui",
+          "false": "Non"
         }
       }
     },
@@ -1087,7 +1187,9 @@
           "importTitle": "Імпорт {fileName}",
           "importReplaceWarning": "Локальне сховище буде замінено лише після успішного розшифрування та перевірки імпортованого файла.",
           "importPassword": "Головний пароль імпортованого сховища",
-          "notUnlocked": "Сховище не розблоковано"
+          "notUnlocked": "Сховище не розблоковано",
+          "masterPasswordEmpty": "Головний пароль не може бути порожнім.",
+          "localVaultMissing": "Локальне сховище WalletWalley не існує."
         },
         "wallet": {
           "operationFailed": "Операцію не виконано: {error}",
@@ -1098,7 +1200,9 @@
           "exportEncryptedVaultTooltip": "Експортувати зашифроване сховище",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Заблокувати"
+          "lock": "Заблокувати",
+          "lockFileTooltip": "Зашифрувати файл або каталог",
+          "unlockFileTooltip": "Розшифрувати файл KWVLOCK"
         },
         "groupEditor": {
           "newTitle": "Нова група",
@@ -1161,7 +1265,22 @@
           "exportPub": "Експортувати .pub",
           "artifactCopied": "{artifactName} скопійовано",
           "copy": "Копіювати",
-          "export": "Експортувати"
+          "export": "Експортувати",
+          "kinds": {
+            "text": "Текст",
+            "file": "Файл",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Випадковий токен",
+            "github-token": "Токен GitHub",
+            "custom-key": "Власний ключ"
+          }
         },
         "keygen": {
           "title": "Згенерувати / зберегти ключ",
@@ -1293,6 +1412,12 @@
           "saveEncryptedFile": "Зберегти зашифрований файл",
           "chooseDirectoryEncrypt": "Вибрати каталог для шифрування",
           "chooseUnlockDestination": "Вибрати місце для розшифрованого вмісту"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "Шифрування файлів KWVLOCK",
+          "issuedByGitHub": "видано GitHub",
+          "true": "Так",
+          "false": "Ні"
         }
       }
     },
@@ -1345,7 +1470,9 @@
           "importTitle": "Importa {fileName}",
           "importReplaceWarning": "Il vault locale viene sostituito solo dopo che il file importato è stato decifrato e validato correttamente.",
           "importPassword": "Password principale del vault importato",
-          "notUnlocked": "Il vault non è sbloccato"
+          "notUnlocked": "Il vault non è sbloccato",
+          "masterPasswordEmpty": "La password principale non può essere vuota.",
+          "localVaultMissing": "Il vault locale WalletWalley non esiste."
         },
         "wallet": {
           "operationFailed": "Operazione non riuscita: {error}",
@@ -1356,7 +1483,9 @@
           "exportEncryptedVaultTooltip": "Esporta vault cifrato",
           "lockFile": "LockFile",
           "unlockFile": "UnlockFile",
-          "lock": "Blocca"
+          "lock": "Blocca",
+          "lockFileTooltip": "Cifra un file o una directory",
+          "unlockFileTooltip": "Decifra un file KWVLOCK"
         },
         "groupEditor": {
           "newTitle": "Nuovo gruppo",
@@ -1419,7 +1548,22 @@
           "exportPub": "Esporta .pub",
           "artifactCopied": "{artifactName} copiato",
           "copy": "Copia",
-          "export": "Esporta"
+          "export": "Esporta",
+          "kinds": {
+            "text": "Testo",
+            "file": "File",
+            "github-ssh": "GitHub SSH",
+            "ssh": "SSH",
+            "solana": "Solana",
+            "wireguard": "WireGuard",
+            "file-lock": "File Lock",
+            "ethereum": "Ethereum",
+            "tron": "TRON",
+            "bitcoin": "Bitcoin",
+            "random-token": "Token casuale",
+            "github-token": "Token GitHub",
+            "custom-key": "Chiave personalizzata"
+          }
         },
         "keygen": {
           "title": "Genera / salva chiave",
@@ -1551,6 +1695,12 @@
           "saveEncryptedFile": "Salva file cifrato",
           "chooseDirectoryEncrypt": "Scegli directory da cifrare",
           "chooseUnlockDestination": "Scegli destinazione del contenuto decifrato"
+        },
+        "metadataValues": {
+          "kwvlockFileEncryption": "Cifratura file KWVLOCK",
+          "issuedByGitHub": "emesso da GitHub",
+          "true": "Sì",
+          "false": "No"
         }
       }
     }

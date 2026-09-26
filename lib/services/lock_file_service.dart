@@ -79,9 +79,11 @@ class LockFileService {
     return result;
   }
 
-  static Future<PickedLockedFile?> pickLockedFile() async {
+  static Future<PickedLockedFile?> pickLockedFile({
+    required String dialogTitle,
+  }) async {
     final file = await FilePicker.pickFile(
-      dialogTitle: 'Open encrypted KWVLOCK file',
+      dialogTitle: dialogTitle,
       type: FileType.custom,
       allowedExtensions: const ['kwvlock'],
     );
@@ -93,12 +95,16 @@ class LockFileService {
     );
   }
 
-  static Future<String?> encryptPickedFile({required LockKeyRef recipient}) async {
+  static Future<String?> encryptPickedFile({
+    required LockKeyRef recipient,
+    required String chooseDialogTitle,
+    required String saveDialogTitle,
+  }) async {
     final publicKey = recipient.publicKey;
     if (publicKey == null) throw StateError('Selected entry has no X25519 public key');
 
     final file = await FilePicker.pickFile(
-      dialogTitle: 'Choose file to encrypt',
+      dialogTitle: chooseDialogTitle,
       type: FileType.any,
     );
     if (file == null) return null;
@@ -119,7 +125,7 @@ class LockFileService {
     }
 
     final saved = await FilePicker.saveFile(
-      dialogTitle: 'Save encrypted file',
+      dialogTitle: saveDialogTitle,
       fileName: '${file.name}.kwvlock',
       bytes: locked,
       type: FileType.custom,
@@ -129,12 +135,15 @@ class LockFileService {
     return saved?.toString();
   }
 
-  static Future<String?> encryptPickedDirectory({required LockKeyRef recipient}) async {
+  static Future<String?> encryptPickedDirectory({
+    required LockKeyRef recipient,
+    required String dialogTitle,
+  }) async {
     final publicKey = recipient.publicKey;
     if (publicKey == null) throw StateError('Selected entry has no X25519 public key');
 
     final selected = await FilePicker.getDirectoryPath(
-      dialogTitle: 'Choose directory to encrypt',
+      dialogTitle: dialogTitle,
     );
     if (selected == null) return null;
 
@@ -155,6 +164,7 @@ class LockFileService {
   static Future<String> unlockToSiblingDirectory({
     required PickedLockedFile picked,
     required LockKeyRef recipient,
+    required String destinationDialogTitle,
   }) async {
     final privateKey = recipient.privateKey;
     if (privateKey == null) throw StateError('Selected entry has no X25519 private key');
@@ -174,7 +184,7 @@ class LockFileService {
       parent = File.fromUri(picked.uri).parent;
     } else {
       final destination = await FilePicker.getDirectoryPath(
-        dialogTitle: 'Choose destination for unlocked content',
+        dialogTitle: destinationDialogTitle,
       );
       if (destination == null) {
         throw FileSystemException('Unlock destination was not selected');
