@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'services/clipboard_service.dart';
 import 'services/language_service.dart';
 import 'services/settings_service.dart';
 import 'ui/app.dart';
@@ -12,6 +13,8 @@ Future<void> main() async {
 
   await languageService.load();
   await settingsService.load();
+
+  ClipboardService.initialize(settingsService);
 
   runApp(
     WalletWalleyApp(
