@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 
+import 'external_ui_guard.dart';
+
 class PickedVaultFile {
   final String name;
   final Uint8List bytes;
@@ -23,10 +25,12 @@ class FileService {
   static Future<PickedVaultFile?> pickVault({
     required String dialogTitle,
   }) async {
-    final file = await FilePicker.pickFile(
-      dialogTitle: dialogTitle,
-      type: FileType.custom,
-      allowedExtensions: const ['kwvault'],
+    final file = await ExternalUiGuard.run(
+      () => FilePicker.pickFile(
+        dialogTitle: dialogTitle,
+        type: FileType.custom,
+        allowedExtensions: const ['kwvault'],
+      ),
     );
     if (file == null) return null;
 
@@ -37,9 +41,11 @@ class FileService {
   static Future<PickedGenericFile?> pickAnyFile({
     required String dialogTitle,
   }) async {
-    final file = await FilePicker.pickFile(
-      dialogTitle: dialogTitle,
-      type: FileType.any,
+    final file = await ExternalUiGuard.run(
+      () => FilePicker.pickFile(
+        dialogTitle: dialogTitle,
+        type: FileType.any,
+      ),
     );
     if (file == null) return null;
 
@@ -57,13 +63,15 @@ class FileService {
         '${now.year}${two(now.month)}${two(now.day)}-'
         '${two(now.hour)}${two(now.minute)}${two(now.second)}.kwvault';
 
-    return FilePicker.saveFile(
-      dialogTitle: dialogTitle,
-      fileName: fileName,
-      bytes: bytes,
-      mimeType: 'application/vnd.keywallet.vault',
-      type: FileType.custom,
-      allowedExtensions: const ['kwvault'],
+    return ExternalUiGuard.run(
+      () => FilePicker.saveFile(
+        dialogTitle: dialogTitle,
+        fileName: fileName,
+        bytes: bytes,
+        mimeType: 'application/vnd.keywallet.vault',
+        type: FileType.custom,
+        allowedExtensions: const ['kwvault'],
+      ),
     );
   }
 
@@ -72,11 +80,13 @@ class FileService {
     required Uint8List bytes,
     required String dialogTitle,
   }) {
-    return FilePicker.saveFile(
-      dialogTitle: dialogTitle,
-      fileName: fileName,
-      bytes: bytes,
-      type: FileType.any,
+    return ExternalUiGuard.run(
+      () => FilePicker.saveFile(
+        dialogTitle: dialogTitle,
+        fileName: fileName,
+        bytes: bytes,
+        type: FileType.any,
+      ),
     );
   }
 }

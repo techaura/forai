@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import '../core/vault/vault_repository.dart';
+import '../services/external_ui_guard.dart';
 import '../services/file_service.dart';
 import '../services/language_service.dart';
 import '../services/settings_service.dart';
@@ -16,10 +19,13 @@ import 'wallet_page.dart';
 /// Important: the stateful controller lives *below* MaterialApp. Dialogs and
 /// snackbars therefore always receive MaterialLocalizations/ScaffoldMessenger.
 class WalletWalleyApp extends StatelessWidget {
+  final GlobalKey<_WalletWalleyControllerState> _controllerKey =
+      GlobalKey<_WalletWalleyControllerState>();
+
   final LanguageService languageService;
   final SettingsService settingsService;
 
-  const WalletWalleyApp({
+  WalletWalleyApp({
     super.key,
     required this.languageService,
     required this.settingsService,
@@ -53,16 +59,23 @@ class WalletWalleyApp extends StatelessWidget {
           ),
 
           builder: (context, child) {
-            return SettingsScope(
-              service: settingsService,
-              child: LanguageScope(
-                service: languageService,
-                child: child ?? const SizedBox.shrink(),
+            return _UserActivityBoundary(
+              onActivity: () =>
+                  _controllerKey.currentState?._registerUserActivity(),
+              child: SettingsScope(
+                service: settingsService,
+                child: LanguageScope(
+                  service: languageService,
+                  child: child ?? const SizedBox.shrink(),
+                ),
               ),
             );
           },
 
-          home: const _WalletWalleyController(),
+          home: _WalletWalleyController(
+            key: _controllerKey,
+            settingsService: settingsService,
+          ),
         );
       },
     );
@@ -96,8 +109,41 @@ class WalletWalleyApp extends StatelessWidget {
   }
 }
 
+class _UserActivityBoundary extends StatelessWidget {
+  final VoidCallback onActivity;
+  final Widget child;
+
+  const _UserActivityBoundary({
+    required this.onActivity,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      onKeyEvent: (_, event) {
+        if (event is KeyDownEvent) onActivity();
+        return KeyEventResult.ignored;
+      },
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: (_) => onActivity(),
+        onPointerSignal: (_) => onActivity(),
+        child: child,
+      ),
+    );
+  }
+}
+
 class _WalletWalleyController extends StatefulWidget {
-  const _WalletWalleyController();
+  final SettingsService settingsService;
+
+  const _WalletWalleyController({
+    super.key,
+    required this.settingsService,
+  });
 
   @override
   State<_WalletWalleyController> createState() =>
@@ -106,6 +152,11 @@ class _WalletWalleyController extends StatefulWidget {
 
 class _WalletWalleyControllerState extends State<_WalletWalleyController> {
   final VaultRepository _repository = VaultRepository();
+
+  Timer? _autoLockTimer;
+  late final AppLifecycleListener _appLifecycleListener;
+  AppLifecycleState _lifecycleState = AppLifecycleState.resumed;
+  int _sessionGeneration = 0;
 
   bool _loading = true;
   bool _busy = false;
@@ -117,7 +168,99 @@ class _WalletWalleyControllerState extends State<_WalletWalleyController> {
   @override
   void initState() {
     super.initState();
+    _lifecycleState =
+        WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
+    widget.settingsService.addListener(_handleSettingsChanged);
+    ExternalUiGuard.addListener(_handleExternalUiActivityChanged);
+    _appLifecycleListener = AppLifecycleListener(
+      onStateChange: _handleAppLifecycleState,
+    );
     _probe();
+  }
+
+  @override
+  void didUpdateWidget(covariant _WalletWalleyController oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.settingsService, widget.settingsService)) {
+      oldWidget.settingsService.removeListener(_handleSettingsChanged);
+      widget.settingsService.addListener(_handleSettingsChanged);
+      _restartAutoLockTimer();
+    }
+  }
+
+  @override
+  void dispose() {
+    _cancelAutoLockTimer();
+    widget.settingsService.removeListener(_handleSettingsChanged);
+    ExternalUiGuard.removeListener(_handleExternalUiActivityChanged);
+    _appLifecycleListener.dispose();
+    super.dispose();
+  }
+
+  void _handleSettingsChanged() {
+    _restartAutoLockTimer();
+  }
+
+  void _handleExternalUiActivityChanged(bool isActive) {
+    if (isActive) {
+      _cancelAutoLockTimer();
+    } else {
+      _restartAutoLockTimer();
+    }
+  }
+
+  void _handleAppLifecycleState(AppLifecycleState state) {
+    _lifecycleState = state;
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _restartAutoLockTimer();
+        return;
+      case AppLifecycleState.inactive:
+        return;
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        if (ExternalUiGuard.isActive) {
+          _cancelAutoLockTimer();
+          return;
+        }
+        if (_opened != null || _busy) {
+          unawaited(_lock());
+        }
+        return;
+      case AppLifecycleState.detached:
+        unawaited(_lock());
+        return;
+    }
+  }
+
+  void _registerUserActivity() {
+    if (_opened == null || ExternalUiGuard.isActive) return;
+    _restartAutoLockTimer();
+  }
+
+  void _cancelAutoLockTimer() {
+    _autoLockTimer?.cancel();
+    _autoLockTimer = null;
+  }
+
+  void _restartAutoLockTimer() {
+    _cancelAutoLockTimer();
+
+    if (_opened == null || ExternalUiGuard.isActive) return;
+    if (_lifecycleState == AppLifecycleState.hidden ||
+        _lifecycleState == AppLifecycleState.paused ||
+        _lifecycleState == AppLifecycleState.detached) {
+      return;
+    }
+
+    final seconds = widget.settingsService.autoLockSeconds;
+    if (seconds <= 0) return;
+
+    _autoLockTimer = Timer(Duration(seconds: seconds), () {
+      if (!mounted || _opened == null || ExternalUiGuard.isActive) return;
+      unawaited(_lock());
+    });
   }
 
   Future<void> _probe() async {
@@ -141,20 +284,25 @@ class _WalletWalleyControllerState extends State<_WalletWalleyController> {
     Future<OpenedVault> Function() action, {
     String? sessionPassword,
   }) async {
+    final operationGeneration = _sessionGeneration;
+
     setState(() {
       _busy = true;
       _error = null;
     });
     try {
       final opened = await action();
-      if (!mounted) return;
+      if (!mounted || operationGeneration != _sessionGeneration) return;
+
+      _sessionGeneration++;
       setState(() {
         _opened = opened;
         _hasVault = true;
         if (sessionPassword != null) _sessionPassword = sessionPassword;
       });
+      _restartAutoLockTimer();
     } catch (error) {
-      if (!mounted) return;
+      if (!mounted || operationGeneration != _sessionGeneration) return;
       setState(() => _error = _friendlyError(error));
       ScaffoldMessenger.of(
         context,
@@ -346,16 +494,33 @@ class _WalletWalleyControllerState extends State<_WalletWalleyController> {
       throw StateError('Vault is not unlocked');
     }
 
+    final sessionGeneration = _sessionGeneration;
     final saved = await _repository.save(
       vault: opened.vault,
       password: password,
       previousRevision: opened.revision,
     );
-    if (!mounted) return;
+    if (!mounted ||
+        sessionGeneration != _sessionGeneration ||
+        !identical(_opened, opened)) {
+      return;
+    }
+
     setState(() => _opened = saved);
+    _restartAutoLockTimer();
   }
 
   Future<void> _lock() async {
+    if (!mounted) return;
+
+    _cancelAutoLockTimer();
+    _sessionGeneration++;
+
+    if (_opened == null && _sessionPassword == null) return;
+
+    Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+    if (!mounted) return;
+
     setState(() {
       _opened = null;
       _sessionPassword = null;

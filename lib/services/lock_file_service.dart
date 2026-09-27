@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 
 import '../core/crypto/kwvlock.dart';
 import '../core/vault/vault_node.dart';
+import 'external_ui_guard.dart';
 
 class LockKeyRef {
   final VaultNode node;
@@ -82,10 +83,12 @@ class LockFileService {
   static Future<PickedLockedFile?> pickLockedFile({
     required String dialogTitle,
   }) async {
-    final file = await FilePicker.pickFile(
-      dialogTitle: dialogTitle,
-      type: FileType.custom,
-      allowedExtensions: const ['kwvlock'],
+    final file = await ExternalUiGuard.run(
+      () => FilePicker.pickFile(
+        dialogTitle: dialogTitle,
+        type: FileType.custom,
+        allowedExtensions: const ['kwvlock'],
+      ),
     );
     if (file == null) return null;
     return PickedLockedFile(
@@ -103,9 +106,11 @@ class LockFileService {
     final publicKey = recipient.publicKey;
     if (publicKey == null) throw StateError('Selected entry has no X25519 public key');
 
-    final file = await FilePicker.pickFile(
-      dialogTitle: chooseDialogTitle,
-      type: FileType.any,
+    final file = await ExternalUiGuard.run(
+      () => FilePicker.pickFile(
+        dialogTitle: chooseDialogTitle,
+        type: FileType.any,
+      ),
     );
     if (file == null) return null;
 
@@ -124,13 +129,15 @@ class LockFileService {
       return output.path;
     }
 
-    final saved = await FilePicker.saveFile(
-      dialogTitle: saveDialogTitle,
-      fileName: '${file.name}.kwvlock',
-      bytes: locked,
-      type: FileType.custom,
-      allowedExtensions: const ['kwvlock'],
-      mimeType: 'application/vnd.keywallet.locked',
+    final saved = await ExternalUiGuard.run(
+      () => FilePicker.saveFile(
+        dialogTitle: saveDialogTitle,
+        fileName: '${file.name}.kwvlock',
+        bytes: locked,
+        type: FileType.custom,
+        allowedExtensions: const ['kwvlock'],
+        mimeType: 'application/vnd.keywallet.locked',
+      ),
     );
     return saved?.toString();
   }
@@ -142,8 +149,10 @@ class LockFileService {
     final publicKey = recipient.publicKey;
     if (publicKey == null) throw StateError('Selected entry has no X25519 public key');
 
-    final selected = await FilePicker.getDirectoryPath(
-      dialogTitle: dialogTitle,
+    final selected = await ExternalUiGuard.run(
+      () => FilePicker.getDirectoryPath(
+        dialogTitle: dialogTitle,
+      ),
     );
     if (selected == null) return null;
 
@@ -183,8 +192,10 @@ class LockFileService {
     if (picked.uri.scheme == 'file') {
       parent = File.fromUri(picked.uri).parent;
     } else {
-      final destination = await FilePicker.getDirectoryPath(
-        dialogTitle: destinationDialogTitle,
+      final destination = await ExternalUiGuard.run(
+        () => FilePicker.getDirectoryPath(
+          dialogTitle: destinationDialogTitle,
+        ),
       );
       if (destination == null) {
         throw FileSystemException('Unlock destination was not selected');

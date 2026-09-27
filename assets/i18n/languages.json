@@ -22,7 +22,15 @@
           "clipboard15Seconds": "15 Sekunden",
           "clipboard30Seconds": "30 Sekunden",
           "clipboard1Minute": "1 Minute",
-          "clipboard5Minutes": "5 Minuten"
+          "clipboard5Minutes": "5 Minuten",
+          "autoLock": "Automatische Sperre",
+          "autoLockPolicy": "Tresor bei Inaktivität sperren",
+          "autoLockHelp": "Sperrt den entsperrten Tresor nach der gewählten Zeit ohne Eingabe. Beim Ausblenden oder Pausieren der App wird sofort gesperrt.",
+          "autoLockNever": "Nie",
+          "autoLock5Minutes": "5 Minuten",
+          "autoLock15Minutes": "15 Minuten",
+          "autoLock30Minutes": "30 Minuten",
+          "autoLock1Hour": "1 Stunde"
         },
         "common": {
           "cancel": "Abbrechen",
@@ -316,7 +324,15 @@
           "clipboard15Seconds": "15 seconds",
           "clipboard30Seconds": "30 seconds",
           "clipboard1Minute": "1 minute",
-          "clipboard5Minutes": "5 minutes"
+          "clipboard5Minutes": "5 minutes",
+          "autoLock": "Auto-lock",
+          "autoLockPolicy": "Lock vault after inactivity",
+          "autoLockHelp": "Locks the unlocked vault after the selected time without input. If the app is hidden or paused, it locks immediately.",
+          "autoLockNever": "Never",
+          "autoLock5Minutes": "5 minutes",
+          "autoLock15Minutes": "15 minutes",
+          "autoLock30Minutes": "30 minutes",
+          "autoLock1Hour": "1 hour"
         },
         "common": {
           "cancel": "Cancel",
@@ -610,7 +626,15 @@
           "clipboard15Seconds": "15 segundos",
           "clipboard30Seconds": "30 segundos",
           "clipboard1Minute": "1 minuto",
-          "clipboard5Minutes": "5 minutos"
+          "clipboard5Minutes": "5 minutos",
+          "autoLock": "Bloqueo automático",
+          "autoLockPolicy": "Bloquear el almacén por inactividad",
+          "autoLockHelp": "Bloquea el almacén desbloqueado después del tiempo seleccionado sin actividad. Si la aplicación se oculta o se pausa, se bloquea inmediatamente.",
+          "autoLockNever": "Nunca",
+          "autoLock5Minutes": "5 minutos",
+          "autoLock15Minutes": "15 minutos",
+          "autoLock30Minutes": "30 minutos",
+          "autoLock1Hour": "1 hora"
         },
         "common": {
           "cancel": "Cancelar",
@@ -904,7 +928,15 @@
           "clipboard15Seconds": "15 secondes",
           "clipboard30Seconds": "30 secondes",
           "clipboard1Minute": "1 minute",
-          "clipboard5Minutes": "5 minutes"
+          "clipboard5Minutes": "5 minutes",
+          "autoLock": "Verrouillage automatique",
+          "autoLockPolicy": "Verrouiller le coffre après inactivité",
+          "autoLockHelp": "Verrouille le coffre déverrouillé après la durée choisie sans activité. Si l’application est masquée ou mise en pause, il est verrouillé immédiatement.",
+          "autoLockNever": "Jamais",
+          "autoLock5Minutes": "5 minutes",
+          "autoLock15Minutes": "15 minutes",
+          "autoLock30Minutes": "30 minutes",
+          "autoLock1Hour": "1 heure"
         },
         "common": {
           "cancel": "Annuler",
@@ -1198,7 +1230,15 @@
           "clipboard15Seconds": "15 секунд",
           "clipboard30Seconds": "30 секунд",
           "clipboard1Minute": "1 хвилина",
-          "clipboard5Minutes": "5 хвилин"
+          "clipboard5Minutes": "5 хвилин",
+          "autoLock": "Автоблокування",
+          "autoLockPolicy": "Блокувати сховище через бездіяльність",
+          "autoLockHelp": "Блокує розблоковане сховище після вибраного часу без дій. Якщо програму приховано або призупинено, сховище блокується негайно.",
+          "autoLockNever": "Ніколи",
+          "autoLock5Minutes": "5 хвилин",
+          "autoLock15Minutes": "15 хвилин",
+          "autoLock30Minutes": "30 хвилин",
+          "autoLock1Hour": "1 година"
         },
         "common": {
           "cancel": "Скасувати",
@@ -1492,7 +1532,15 @@
           "clipboard15Seconds": "15 secondi",
           "clipboard30Seconds": "30 secondi",
           "clipboard1Minute": "1 minuto",
-          "clipboard5Minutes": "5 minuti"
+          "clipboard5Minutes": "5 minuti",
+          "autoLock": "Blocco automatico",
+          "autoLockPolicy": "Blocca il vault per inattività",
+          "autoLockHelp": "Blocca il vault sbloccato dopo il tempo selezionato senza attività. Se l’app viene nascosta o sospesa, il vault viene bloccato immediatamente.",
+          "autoLockNever": "Mai",
+          "autoLock5Minutes": "5 minuti",
+          "autoLock15Minutes": "15 minuti",
+          "autoLock30Minutes": "30 minuti",
+          "autoLock1Hour": "1 ora"
         },
         "common": {
           "cancel": "Annulla",
