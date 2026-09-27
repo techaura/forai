@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsService extends ChangeNotifier {
   static const int defaultClipboardClearSeconds = 0;
-  static const int defaultAutoLockSeconds = 0;
+  static const int defaultAutoLockSeconds = 60;
 
   static const String _clipboardClearSecondsKey = 'clipboard_clear_seconds';
   static const String _autoLockSecondsKey = 'auto_lock_seconds';
@@ -18,6 +18,7 @@ class SettingsService extends ChangeNotifier {
 
   static const List<int> autoLockOptionsSeconds = <int>[
     0,
+    60,
     300,
     900,
     1800,

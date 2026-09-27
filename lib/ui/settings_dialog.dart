@@ -113,6 +113,7 @@ class _SettingsDialog extends StatelessWidget {
   String _autoLockTimeoutLabel(LanguageService languageService, int seconds) {
     return switch (seconds) {
       0 => languageService.text('settings.autoLockNever'),
+      60 => languageService.text('settings.clipboard1Minute'),
       300 => languageService.text('settings.autoLock5Minutes'),
       900 => languageService.text('settings.autoLock15Minutes'),
       1800 => languageService.text('settings.autoLock30Minutes'),
